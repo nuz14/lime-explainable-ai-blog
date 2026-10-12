@@ -18,7 +18,7 @@
   --green-dark: #31563c;
   --border: #dfe8db;
   --peach: #fae9dc;
-  --shadow: 0 12px 35px rgba(48,79,54,.07);
+  --shadow: 0 12px 35px rgba(48, 79, 54, .07);
 }
 
 body.dark {
@@ -31,16 +31,16 @@ body.dark {
   --green-dark: #d0ebce;
   --border: #3c5040;
   --peach: #46352c;
-  --shadow: 0 12px 35px rgba(0,0,0,.18);
+  --shadow: 0 12px 35px rgba(0, 0, 0, .18);
 }
 
 * {
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 84px;
+  scroll-padding-top: 85px;
 }
 
 body {
@@ -106,7 +106,7 @@ nav {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 24px;
 }
 
 .nav-links a {
@@ -127,7 +127,7 @@ nav {
 /* HERO */
 
 .hero {
-  padding: 66px 0 72px;
+  padding: 100px 0 80px;
   background:
     radial-gradient(circle at 85% 20%, #dcebd8 0, transparent 27%),
     radial-gradient(circle at 10% 80%, #fae9dc 0, transparent 25%);
@@ -146,10 +146,6 @@ body.dark .hero {
   font-weight: 800;
   letter-spacing: 2px;
   margin-bottom: 16px;
-}
-
-.hero .eyebrow {
-  margin-bottom: 12px;
 }
 
 .hero h1 {
@@ -182,6 +178,7 @@ body.dark .hero {
 
 section {
   padding: 76px 0;
+  scroll-margin-top: 85px;
 }
 
 .section-head {
@@ -200,12 +197,6 @@ section {
 .section-head p {
   color: var(--muted);
   margin: 0;
-}
-
-/* Heading targets: align the green eyebrow just below navigation */
-
-.heading-target {
-  scroll-margin-top: 88px;
 }
 
 .card {
@@ -293,12 +284,11 @@ li {
 }
 
 .btn {
-  display: inline-block;
   padding: 12px 18px;
   border-radius: 30px;
   border: 1px solid var(--green);
   font-weight: 700;
-  transition: transform .15s;
+  transition: transform .15s, opacity .15s;
 }
 
 .btn:hover {
@@ -329,7 +319,7 @@ body.dark .btn-primary {
 }
 
 .results-card {
-  scroll-margin-top: 88px;
+  scroll-margin-top: 95px;
 }
 
 .chart-wrap {
@@ -455,7 +445,7 @@ canvas {
   flex-grow: 1;
 }
 
-/* FURTHER READING */
+/* READING LIST */
 
 .resource-list {
   max-width: 850px;
@@ -484,6 +474,10 @@ canvas {
   font-size: 1.2rem !important;
   color: var(--green) !important;
   flex-shrink: 0;
+}
+
+.resource-link:hover strong {
+  text-decoration: underline;
 }
 
 /* FOOTER */
@@ -518,7 +512,7 @@ footer p {
   background: var(--surface-soft);
 }
 
-/* MOBILE */
+/* RESPONSIVE */
 
 @media (max-width: 760px) {
   .nav-inner {
@@ -538,7 +532,7 @@ footer p {
   }
 
   .hero {
-    padding: 48px 0 55px;
+    padding: 72px 0 60px;
   }
 
   section {
@@ -561,7 +555,7 @@ footer p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *, *::before, *::after, html {
     scroll-behavior: auto !important;
     transition: none !important;
   }
@@ -577,8 +571,8 @@ footer p {
 
     <div class="nav-links">
       <a href="#home">Home</a>
-      <a href="#lab-heading">Lab</a>
-      <a href="#how-heading">How It Works</a>
+      <a href="#lab">Lab</a>
+      <a href="#how-it-works">How It Works</a>
     </div>
 
     <button class="theme-button" id="themeBtn"
@@ -606,8 +600,8 @@ footer p {
     </div>
 
     <div class="button-row">
-      <a class="btn btn-primary" href="#lab-heading">Explore the LIME Lab ↓</a>
-      <a class="btn btn-secondary" href="#big-idea-heading">Discover LIME</a>
+      <a class="btn btn-primary" href="#lab">Explore the LIME Lab ↓</a>
+      <a class="btn btn-secondary" href="#what-is-lime">Discover LIME</a>
     </div>
   </div>
 </header>
@@ -615,7 +609,7 @@ footer p {
 <!-- INTRODUCTION -->
 <section id="what-is-lime">
   <div class="container">
-    <div class="section-head heading-target" id="big-idea-heading">
+    <div class="section-head">
       <div class="eyebrow">01 · The Big Idea</div>
       <h2>What is LIME?</h2>
       <p>
@@ -660,7 +654,7 @@ footer p {
 <!-- INTERACTIVE LAB -->
 <section class="lab-section" id="lab">
   <div class="container">
-    <div class="section-head heading-target" id="lab-heading">
+    <div class="section-head">
       <div class="eyebrow">02 · Try It Yourself</div>
       <h2>Welcome to the LIME Lab 🧪</h2>
       <p>
@@ -693,7 +687,9 @@ footer p {
           </label>
           <input id="samples" type="range" min="50" max="500"
             step="50" value="100">
-          <div class="small-note">Number of illustrative nearby cases</div>
+          <div class="small-note">
+            Number of illustrative nearby cases
+          </div>
         </div>
 
         <div class="control-group">
@@ -726,7 +722,9 @@ footer p {
         <div class="eyebrow">Illustrative Results</div>
         <h3>🧭 Local Feature Influence</h3>
 
-        <p>Example: <strong id="resultStudent">Aarav</strong></p>
+        <p>
+          Example: <strong id="resultStudent">Aarav</strong>
+        </p>
 
         <div class="result-label" id="predictionLabel">
           Example outcome: Likely to qualify
@@ -764,7 +762,8 @@ footer p {
       This interactive lab is a simulated educational demonstration.
       It does not run the official LIME algorithm, train a scholarship
       prediction model, or use real student data. The graph and feature
-      influences are illustrative and are intended to help explain the concept.
+      influences are illustrative and are intended to help explain the
+      concept.
     </div>
   </div>
 </section>
@@ -811,7 +810,7 @@ footer p {
 <!-- HOW IT WORKS -->
 <section id="how-it-works">
   <div class="container">
-    <div class="section-head heading-target" id="how-heading">
+    <div class="section-head">
       <div class="eyebrow">04 · Behind the Method</div>
       <h2>How Does LIME Work?</h2>
       <p>
@@ -895,7 +894,9 @@ footer p {
     <div class="section-head">
       <div class="eyebrow">06 · Keep Exploring</div>
       <h2>📚 Further Reading</h2>
-      <p>Want to learn more about LIME? Start with these resources.</p>
+      <p>
+        Want to learn more about LIME? Start with these resources.
+      </p>
     </div>
 
     <div class="resource-list">
@@ -1116,7 +1117,7 @@ function renderExplanation() {
     " simulated nearby cases. These values are examples, not real model results.";
 }
 
-/* RUN: UPDATE RESULTS AND JUMP DIRECTLY TO THEM */
+/* RUN: UPDATE RESULTS, THEN JUMP DIRECTLY TO THEM */
 document.getElementById("runBtn").addEventListener("click", () => {
   updateValues();
   drawChart();
@@ -1127,6 +1128,7 @@ document.getElementById("runBtn").addEventListener("click", () => {
     " simulated nearby cases and " + featuresSlider.value +
     " example feature influences.";
 
+  // Scroll directly to the results without a slow animation.
   document.getElementById("explanation").scrollIntoView({
     behavior: "auto",
     block: "start"
@@ -1145,7 +1147,7 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   statusBox.textContent =
     "Experiment reset. Choose your settings and run it again.";
 
-  document.getElementById("lab-heading").scrollIntoView({
+  document.getElementById("lab").scrollIntoView({
     behavior: "auto",
     block: "start"
   });
@@ -1164,6 +1166,7 @@ document.getElementById("themeBtn").addEventListener("click", () => {
 
   const isDark = document.body.classList.contains("dark");
   document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙";
+
   document.getElementById("themeBtn").setAttribute(
     "aria-label",
     isDark ? "Switch to light mode" : "Switch to dark mode"
@@ -1172,6 +1175,7 @@ document.getElementById("themeBtn").addEventListener("click", () => {
   drawChart();
 });
 
+// Redraw the chart when the browser window changes size.
 window.addEventListener("resize", drawChart);
 
 // Initial display
