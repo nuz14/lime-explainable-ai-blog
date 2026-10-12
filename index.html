@@ -4,19 +4,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LIME | Understanding One Prediction</title>
+<title>LIME.space | Every Prediction Has a Reason</title>
 
 <style>
 :root {
-  --bg: #f5f7ef;
+  --bg: #f6f8f2;
   --card: #ffffff;
-  --text: #283b35;
-  --muted: #687970;
+  --text: #293b32;
+  --muted: #718078;
   --green: #658b76;
-  --green-light: #e3eee4;
-  --peach: #f5c8ac;
+  --green-light: #e5eee5;
+  --peach: #e7a583;
   --border: #dce5dc;
-  --shadow: 0 8px 28px rgba(42, 68, 53, .07);
+  --shadow: 0 8px 28px rgba(42,68,53,.06);
 }
 
 body.dark {
@@ -26,7 +26,7 @@ body.dark {
   --muted: #b7c8bb;
   --green: #a5d0b1;
   --green-light: #354a3d;
-  --peach: #d99e7c;
+  --peach: #e7a583;
   --border: #405447;
   --shadow: 0 8px 28px rgba(0,0,0,.15);
 }
@@ -45,40 +45,55 @@ body {
 nav {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 14px 7%;
+  gap: 20px;
+  padding: 15px 7%;
   background: var(--card);
   border-bottom: 1px solid var(--border);
 }
 
-.logo { font-weight: 800; font-size: 1.15rem; color: var(--green); }
-
-.navlinks { display: flex; gap: 20px; align-items: center; }
-
-nav a {
-  text-decoration: none;
-  color: var(--muted);
-  font-size: .92rem;
+.logo {
+  color: var(--green);
+  font-size: 1.15rem;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
-nav a:hover, nav a.active { color: var(--green); font-weight: 700; }
+.navlinks {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .92rem;
+  white-space: nowrap;
+}
+
+nav a:hover, nav a.active {
+  color: var(--green);
+  font-weight: 700;
+}
 
 .theme-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text);
   border-radius: 50%;
-  width: 39px;
-  height: 39px;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
 .hero {
-  padding: 90px 8% 75px;
+  padding: 92px 8% 80px;
   text-align: center;
   background: linear-gradient(135deg, var(--green-light), var(--bg), #f8e8db);
 }
@@ -89,18 +104,29 @@ body.dark .hero {
 
 .eyebrow {
   color: var(--green);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: .78rem;
+  font-size: .79rem;
   font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
 }
 
-h1 { font-size: clamp(2.4rem, 5vw, 4.4rem); line-height: 1.12; margin: 15px 0; }
-h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.25; }
-h3 { line-height: 1.3; }
+h1 {
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  line-height: 1.12;
+  margin: 20px 0;
+  letter-spacing: -1.5px;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.25;
+  margin-top: 12px;
+}
+
+h3 { line-height: 1.35; }
 
 .hero p {
-  max-width: 680px;
+  max-width: 690px;
   margin: 20px auto;
   color: var(--muted);
   font-size: 1.1rem;
@@ -116,7 +142,8 @@ h3 { line-height: 1.3; }
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
-  font-size: .95rem;
+  font-size: .94rem;
+  margin: 5px;
 }
 
 .btn.secondary {
@@ -125,13 +152,21 @@ h3 { line-height: 1.3; }
   border: 1px solid var(--border);
 }
 
-section { padding: 65px 8%; scroll-margin-top: 75px; }
-.section-head { max-width: 760px; margin-bottom: 28px; }
+section {
+  padding: 68px 8%;
+  scroll-margin-top: 80px;
+}
+
+.section-head {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
 .section-head p { color: var(--muted); }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0,1fr));
   gap: 20px;
 }
 
@@ -141,54 +176,37 @@ section { padding: 65px 8%; scroll-margin-top: 75px; }
   border-radius: 19px;
   padding: 24px;
   box-shadow: var(--shadow);
+  min-width: 0;
 }
 
-.icon { font-size: 1.8rem; }
 .card p, .muted { color: var(--muted); }
+
+.icon { font-size: 1.8rem; }
 
 .definition {
   border-left: 5px solid var(--green);
   background: var(--green-light);
   border-radius: 0 14px 14px 0;
   padding: 20px 24px;
-  margin: 25px 0;
+  margin: 24px 0;
 }
 
 .definition strong { color: var(--green); }
 
-.steps { counter-reset: step; }
-
-.step {
-  display: flex;
-  gap: 17px;
-  align-items: flex-start;
-  margin: 18px 0;
-}
-
-.step-number {
-  flex: 0 0 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  background: var(--green-light);
-  color: var(--green);
-  border-radius: 50%;
-  font-weight: 800;
-}
-
 .lab-layout {
   display: grid;
-  grid-template-columns: 310px minmax(0, 1fr);
+  grid-template-columns: 310px minmax(0,1fr);
   gap: 22px;
   align-items: start;
 }
 
-label { display: block; font-weight: 700; margin: 14px 0 5px; }
-
-select, input[type="range"] {
-  width: 100%;
-  accent-color: var(--green);
+label {
+  display: block;
+  font-weight: 700;
+  margin: 14px 0 5px;
 }
+
+select, input[type="range"] { width: 100%; accent-color: var(--green); }
 
 select {
   padding: 11px;
@@ -198,13 +216,16 @@ select {
   color: var(--text);
 }
 
-.range-value { color: var(--green); font-weight: 800; float: right; }
+.range-value {
+  color: var(--green);
+  font-weight: 800;
+  float: right;
+}
 
 .status {
   background: var(--green-light);
   padding: 12px 15px;
   border-radius: 11px;
-  color: var(--text);
   margin: 16px 0;
   font-size: .92rem;
 }
@@ -224,6 +245,7 @@ canvas { width: 100%; display: block; }
   flex-wrap: wrap;
   font-size: .85rem;
   color: var(--muted);
+  margin-top: 12px;
 }
 
 .dot {
@@ -258,101 +280,159 @@ canvas { width: 100%; display: block; }
   transition: width .35s;
 }
 
-.bar.negative { background: #dc9b79; }
+.bar.negative { background: var(--peach); }
 
 .note {
   font-size: .88rem;
   color: var(--muted);
 }
 
-.resource {
-  display: block;
-  color: var(--green);
-  text-decoration: none;
-  font-weight: 700;
-  overflow-wrap: anywhere;
-  margin: 10px 0;
+.steps { display: grid; gap: 10px; }
+
+.step {
+  display: flex;
+  gap: 17px;
+  align-items: flex-start;
 }
 
-.resource:hover { text-decoration: underline; }
+.step-number {
+  flex: 0 0 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: var(--green-light);
+  color: var(--green);
+  border-radius: 50%;
+  font-weight: 800;
+}
+
+.resource-list {
+  max-width: 850px;
+}
+
+.resource-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.resource-link:last-child { border-bottom: 0; }
+
+.resource-link strong { color: var(--green); }
+
+.resource-link:hover strong { text-decoration: underline; }
+
+.resource-link span { color: var(--muted); font-size: .9rem; }
 
 footer {
-  padding: 30px 8%;
+  padding: 35px 8%;
   text-align: center;
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: .9rem;
 }
 
+.footer-brand {
+  font-size: 1.4rem;
+  color: var(--green);
+  font-weight: 800;
+}
+
+footer p { margin: 8px 0; }
+
+footer a {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+footer a:hover { text-decoration: underline; }
+
 @media (max-width: 800px) {
+  nav { padding: 13px 4%; gap: 15px; }
+  .navlinks { gap: 14px; }
   .grid { grid-template-columns: 1fr; }
   .lab-layout { grid-template-columns: 1fr; }
-  nav { padding: 12px 4%; }
-  .navlinks { gap: 11px; }
-  nav a { font-size: .8rem; }
-  section { padding: 48px 5%; }
+  section { padding: 50px 5%; }
   .hero { padding: 65px 5%; }
 }
 
-@media (max-width: 420px) {
-  .logo { font-size: .95rem; }
-  .navlinks { gap: 8px; }
-  .navlinks a { font-size: .74rem; }
+@media (max-width: 520px) {
+  nav { gap: 10px; }
+  .logo { font-size: .98rem; }
+  .navlinks { gap: 10px; }
+  nav a { font-size: .78rem; }
+  .theme-btn { width: 35px; height: 35px; }
+  .eyebrow { letter-spacing: .5px; font-size: .69rem; }
 }
 </style>
 </head>
 
-<body>
+<body id="top">
 
 <nav>
-  <div class="logo">🍃 LIME Lab</div>
+  <div class="logo">🍃 LIME.space</div>
+
   <div class="navlinks">
     <a href="#home" class="active">Home</a>
     <a href="#lab">Lab</a>
     <a href="#how">How It Works</a>
-    <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle theme">☾</button>
   </div>
+
+  <button class="theme-btn" id="themeBtn"
+    aria-label="Toggle dark mode" title="Toggle theme">☾</button>
 </nav>
 
 <header class="hero" id="home">
-  <div class="eyebrow">Explainable Artificial Intelligence</div>
-  <h1>Understanding<br>One Prediction</h1>
+  <div class="eyebrow">Student Technical Blog · Explainable AI</div>
+
+  <h1>Every Prediction<br>Has a Reason.</h1>
+
   <p>
-    Machine learning can give us answers without showing its reasoning.
-    LIME helps us look closer at one prediction and understand which features
-    may have influenced it.
+    Machine learning can make decisions that are difficult to understand.
+    LIME helps us look closer at one prediction and explore the features
+    that may have influenced it.
   </p>
-  <a href="#what" class="btn">Discover What LIME Is ↓</a>
-  <a href="#lab" class="btn secondary">Try the Interactive Lab</a>
+
+  <a href="#lab" class="btn">Explore the Experiment ↗</a>
+  <a href="#what" class="btn secondary">Discover LIME</a>
 </header>
 
 <main>
 
 <section id="what">
   <div class="section-head">
-    <div class="eyebrow">Start Here · The Basics</div>
-    <h2>🌱 What is LIME?</h2>
-    <p>Before trying the experiment, let's understand the idea behind it.</p>
+    <div class="eyebrow">01 · Introduction</div>
+    <h2>🌱 What Is LIME?</h2>
+    <p>Let's start with the idea behind this Explainable AI technique.</p>
   </div>
 
   <div class="definition">
     <strong>LIME</strong> stands for
     <strong>Local Interpretable Model-Agnostic Explanations.</strong>
-    It is an Explainable AI technique that helps people understand why a
-    machine learning model made a particular prediction.
+    It is a technique that helps explain why a machine learning model
+    produced a particular prediction.
   </div>
 
   <div class="card">
-    <h3>🔍 The problem LIME helps solve</h3>
+    <h3>🔍 Looking beyond the prediction</h3>
     <p>
-      Some machine learning models are difficult to interpret. They may predict
-      whether a student qualifies for a scholarship, for example, but do not
-      automatically explain why that result was produced.
+      A machine learning model may predict an outcome without making its
+      reasoning easy for us to understand. LIME helps investigate this
+      problem by focusing on one specific prediction at a time.
     </p>
     <p>
-      LIME focuses on one selected prediction. It examines nearby examples and
-      uses a simpler, interpretable model to estimate which input features
-      influenced that prediction locally.
+      It creates variations of the selected example, observes the model's
+      predictions for those variations, and uses a simpler interpretable
+      model to approximate the behaviour near the original example.
+      This gives us a local explanation of the features that may have
+      influenced the result.
     </p>
   </div>
 
@@ -360,49 +440,53 @@ footer {
     <article class="card">
       <div class="icon">📍</div>
       <h3>Local</h3>
-      <p>It explains one particular prediction rather than describing every decision made by the model.</p>
+      <p>Focuses on one particular prediction rather than explaining every decision made by a model.</p>
     </article>
+
     <article class="card">
       <div class="icon">💡</div>
       <h3>Interpretable</h3>
-      <p>It presents the explanation in a simpler form, helping people understand the features involved.</p>
+      <p>Uses a simpler explanation to help people understand the features involved.</p>
     </article>
+
     <article class="card">
       <div class="icon">🧩</div>
       <h3>Model-agnostic</h3>
-      <p>The method can be used with different types of predictive models, provided their predictions can be queried.</p>
+      <p>Can be applied to different predictive models when their predictions can be queried.</p>
     </article>
   </div>
 
   <div class="definition">
-    <strong>In simple words:</strong> A prediction tells us what a model decided.
-    LIME helps us investigate why it may have made that particular decision.
+    <strong>In simple words:</strong> The model gives us a prediction.
+    LIME helps us investigate why it may have made that particular prediction.
   </div>
 </section>
 
 <section id="lab">
   <div class="section-head">
-    <div class="eyebrow">Interactive Experiment</div>
-    <h2>🧪 Local Explanation Lab</h2>
+    <div class="eyebrow">02 · Interactive Workspace</div>
+    <h2>🧪 Explore the Experiment</h2>
     <p>
-      Explore a fictional scholarship eligibility example. Choose a sample student
-      and see how a simplified educational simulation displays a local explanation.
+      What might lead a fictional student to receive an eligibility prediction?
+      Select an example and explore how a local explanation can be presented.
     </p>
   </div>
 
   <div class="definition">
-    <strong>What are we experimenting with?</strong><br>
-    This lab demonstrates the concept of explaining one prediction. The student
-    names are fictional examples, not the subject of LIME itself. The scores and
-    explanations are simulated for learning; this webpage does not run the official
-    LIME algorithm or a trained scholarship model.
+    <strong>What are we investigating?</strong><br>
+    This lab uses a fictional scholarship eligibility scenario to demonstrate
+    the concept of LIME. Aarav, Diya and Kabir are example student profiles;
+    the real topic is how individual predictions can be explained.
+    The example scores and feature influences are simulated for learning.
+    This is not an actual scholarship system or an implementation of the
+    official LIME algorithm.
   </div>
 
   <div class="lab-layout">
     <div class="card">
       <h3>🎛️ Experiment Controls</h3>
 
-      <label for="student">Select a sample student</label>
+      <label for="student">Choose a student example</label>
       <select id="student">
         <option value="0">Aarav · Strong attendance</option>
         <option value="1">Diya · Strong academic marks</option>
@@ -420,158 +504,207 @@ footer {
       <input id="features" type="range" min="2" max="4" step="1" value="3">
 
       <div class="status" id="status" aria-live="polite">
-        Ready. Choose a student and run the experiment.
+        Ready! Choose a student and run the experiment.
       </div>
 
-      <button class="btn" id="runBtn" style="width:100%">✨ Run Local Explanation</button>
-      <button class="btn secondary" id="resetBtn" style="width:100%;margin-top:10px">↺ Reset Experiment</button>
+      <button class="btn" id="runBtn" style="width:100%;margin:0">
+        ✨ Run Local Explanation
+      </button>
+
+      <button class="btn secondary" id="resetBtn" style="width:100%;margin:10px 0 0">
+        ↺ Reset Experiment
+      </button>
 
       <p class="note">
-        Changing the controls updates this educational simulation. A larger
-        sample count represents more nearby examples in the demonstration.
+        The sample slider changes the number of simulated nearby points.
+        The feature slider controls how many illustrative influences are shown.
       </p>
     </div>
 
     <div class="card">
       <h3>📊 Prediction Overview</h3>
-      <p class="muted" id="studentSummary">Aarav's example prediction is ready to explore.</p>
+      <p class="muted" id="studentSummary">
+        Aarav's example prediction is ready to explore.
+      </p>
 
       <div class="chart-wrap">
-        <canvas id="chart" width="650" height="330" role="img"
-          aria-label="Illustrative chart of marks and attendance for sample students"></canvas>
+        <canvas id="chart" width="650" height="330"
+          role="img" aria-label="Illustrative scatter plot of marks and attendance"></canvas>
       </div>
 
       <div class="legend">
-        <span><span class="dot" style="background:#6eaa82"></span>Other sample cases</span>
-        <span><span class="dot" style="background:#e5a17d"></span>Selected student</span>
+        <span><span class="dot" style="background:#6eaa82"></span>Nearby sample cases</span>
+        <span><span class="dot" style="background:#e7a583"></span>Selected student</span>
       </div>
 
       <h3 style="margin-top:28px">🧭 Local Feature Influence</h3>
-      <p class="muted">These illustrative bars show how features may be presented in a local explanation.</p>
+      <p class="muted">
+        Examine the example features displayed for the selected prediction.
+      </p>
+
       <div id="explanation">
-        <p class="note">Run the experiment to display the sample explanation.</p>
+        <p class="note">Run the experiment to view the illustrative explanation.</p>
       </div>
+
       <p class="note">
-        The bars are invented for demonstration. They are not calculated by
-        the official LIME library.
+        These feature values are simulated for this website and are not
+        produced by the official LIME algorithm.
       </p>
     </div>
   </div>
 </section>
 
+<section id="reading">
+  <div class="section-head">
+    <div class="eyebrow">03 · Interpreting the Output</div>
+    <h2>📖 Reading the Result</h2>
+    <p>Here is how to understand the different parts of the experiment.</p>
+  </div>
+
+  <div class="grid">
+    <article class="card">
+      <div class="icon">📈</div>
+      <h3>The scatter plot</h3>
+      <p>
+        Each dot represents a simulated example based on marks and attendance.
+        The highlighted dot represents the selected student. Nearby examples
+        help illustrate the local perspective.
+      </p>
+    </article>
+
+    <article class="card">
+      <div class="icon">🟢</div>
+      <h3>Positive influence</h3>
+      <p>
+        A positive bar represents a feature that supports the illustrative
+        score in this demonstration.
+      </p>
+    </article>
+
+    <article class="card">
+      <div class="icon">🟠</div>
+      <h3>Negative influence</h3>
+      <p>
+        A negative bar represents a feature that lowers the illustrative
+        score in this demonstration.
+      </p>
+    </article>
+  </div>
+
+  <div class="definition">
+    <strong>Remember:</strong> A local explanation describes behaviour near
+    the selected example. It does not automatically explain the whole model
+    or prove that a prediction is correct, fair or reliable.
+  </div>
+</section>
+
 <section id="how">
   <div class="section-head">
-    <div class="eyebrow">Behind the Idea</div>
-    <h2>⚙️ How does LIME work?</h2>
-    <p>At a high level, LIME builds an explanation around the specific example we want to understand.</p>
+    <div class="eyebrow">04 · Understanding the Method</div>
+    <h2>⚙️ How Does LIME Work?</h2>
+    <p>LIME builds an approximate explanation around the individual prediction we want to understand.</p>
   </div>
 
   <div class="card steps">
     <div class="step">
       <div class="step-number">1</div>
-      <div><h3>Choose a prediction</h3><p class="muted">Select one example whose prediction you want to investigate.</p></div>
+      <div>
+        <h3>Choose a prediction</h3>
+        <p class="muted">Select the specific example you want to investigate.</p>
+      </div>
     </div>
+
     <div class="step">
       <div class="step-number">2</div>
-      <div><h3>Create nearby examples</h3><p class="muted">Perturb the input features to generate examples close to the selected case.</p></div>
+      <div>
+        <h3>Create nearby examples</h3>
+        <p class="muted">Generate variations of the selected input by changing its features.</p>
+      </div>
     </div>
+
     <div class="step">
       <div class="step-number">3</div>
-      <div><h3>Obtain predictions</h3><p class="muted">Use the original predictive model to see the predictions for the nearby examples.</p></div>
+      <div>
+        <h3>Observe predictions</h3>
+        <p class="muted">Use the original model to obtain predictions for those nearby examples.</p>
+      </div>
     </div>
+
     <div class="step">
       <div class="step-number">4</div>
-      <div><h3>Fit a simple local model</h3><p class="muted">Give greater importance to examples closer to the selected case and fit an interpretable approximation.</p></div>
+      <div>
+        <h3>Build a local explanation</h3>
+        <p class="muted">Fit a simpler interpretable model that approximates the original model near the selected example.</p>
+      </div>
     </div>
+
     <div class="step">
       <div class="step-number">5</div>
-      <div><h3>Inspect the explanation</h3><p class="muted">Review the features that appear to support or oppose the selected prediction locally.</p></div>
+      <div>
+        <h3>Understand the features</h3>
+        <p class="muted">Inspect the features that appear to support or oppose the prediction locally.</p>
+      </div>
     </div>
   </div>
-
-  <div class="grid" style="margin-top:20px">
-    <article class="card">
-      <div class="icon">➕</div>
-      <h3>Positive influence</h3>
-      <p>A feature may support the prediction being explained.</p>
-    </article>
-    <article class="card">
-      <div class="icon">➖</div>
-      <h3>Negative influence</h3>
-      <p>A feature may count against the prediction being explained.</p>
-    </article>
-    <article class="card">
-      <div class="icon">⚖️</div>
-      <h3>Local, not universal</h3>
-      <p>An explanation for one example may not describe another example or the model as a whole.</p>
-    </article>
-  </div>
 </section>
 
-<section id="useful">
+<section id="conclusion">
   <div class="section-head">
-    <div class="eyebrow">Why It Matters</div>
-    <h2>💚 Why is LIME useful?</h2>
-    <p>
-      Understanding a prediction can help people evaluate whether a model's
-      behaviour makes sense and investigate unexpected results.
-    </p>
-  </div>
-
-  <div class="grid">
-    <article class="card">
-      <div class="icon">🏥</div>
-      <h3>Healthcare</h3>
-      <p>Explore which input features contributed to an individual model prediction.</p>
-    </article>
-    <article class="card">
-      <div class="icon">🎓</div>
-      <h3>Education</h3>
-      <p>Demonstrate how a model might explain an individual student's predicted outcome.</p>
-    </article>
-    <article class="card">
-      <div class="icon">💳</div>
-      <h3>Finance</h3>
-      <p>Investigate the features behind a model's individual risk or approval prediction.</p>
-    </article>
-  </div>
-
-  <div class="definition">
-    <strong>One important limitation:</strong> LIME produces an approximate,
-    local explanation. Results may change depending on the sampled examples,
-    settings, and model. An explanation should not automatically be treated
-    as proof that a prediction is correct or fair.
-  </div>
-</section>
-
-<section id="research">
-  <div class="section-head">
-    <div class="eyebrow">Read More</div>
-    <h2>📚 Research & Useful Links</h2>
-    <p>Explore the original research and official project resources.</p>
+    <div class="eyebrow">05 · Takeaway</div>
+    <h2>💚 Making AI Easier to Understand</h2>
   </div>
 
   <div class="card">
-    <h3>📄 Original Research Paper</h3>
-    <p>“Why Should I Trust You?”: Explaining the Predictions of Any Classifier.</p>
-    <a class="resource" href="https://doi.org/10.1145/2939672.2939778" target="_blank" rel="noopener noreferrer">
-      Read the paper · KDD 2016 ↗
+    <p>
+      LIME is an important Explainable AI technique because it helps us look
+      beyond a model's output and investigate an individual prediction.
+      By approximating model behaviour locally, it offers a more understandable
+      view of the features involved.
+    </p>
+    <p>
+      The key lesson is simple: understanding a prediction can be just as
+      important as receiving one. However, explanations are approximations
+      and should be interpreted carefully.
+    </p>
+  </div>
+</section>
+
+<section id="reading-list">
+  <div class="section-head">
+    <div class="eyebrow">06 · Keep Exploring</div>
+    <h2>📚 Further Reading</h2>
+    <p>Continue learning through the original research and official project resources.</p>
+  </div>
+
+  <div class="card resource-list">
+    <a class="resource-link"
+      href="https://doi.org/10.1145/2939672.2939778"
+      target="_blank" rel="noopener noreferrer">
+      <div>
+        <strong>Original LIME Research Paper</strong><br>
+        <span>Why Should I Trust You? · KDD 2016</span>
+      </div>
+      <span>↗</span>
     </a>
 
-    <hr style="border:0;border-top:1px solid var(--border);margin:22px 0">
-
-    <h3>💻 Official LIME Project</h3>
-    <p>Source code, project information, and implementation details.</p>
-    <a class="resource" href="https://github.com/marcotcr/lime" target="_blank" rel="noopener noreferrer">
-      Visit LIME on GitHub ↗
+    <a class="resource-link"
+      href="https://github.com/marcotcr/lime"
+      target="_blank" rel="noopener noreferrer">
+      <div>
+        <strong>LIME on GitHub</strong><br>
+        <span>Official project, code and implementation</span>
+      </div>
+      <span>↗</span>
     </a>
 
-    <hr style="border:0;border-top:1px solid var(--border);margin:22px 0">
-
-    <h3>📝 Research Preprint</h3>
-    <p>Read the paper on arXiv.</p>
-    <a class="resource" href="https://arxiv.org/abs/1602.04938" target="_blank" rel="noopener noreferrer">
-      View the arXiv paper ↗
+    <a class="resource-link"
+      href="https://arxiv.org/abs/1602.04938"
+      target="_blank" rel="noopener noreferrer">
+      <div>
+        <strong>Read the Research Preprint</strong><br>
+        <span>Research paper available on arXiv</span>
+      </div>
+      <span>↗</span>
     </a>
   </div>
 </section>
@@ -579,36 +712,20 @@ footer {
 </main>
 
 <footer>
-  <p>🍃 LIME Lab · A student-friendly introduction to Explainable AI</p>
-  <p>Educational demonstration only · Not a real eligibility or decision-making system</p>
+  <div class="footer-brand">🍃 LIME.space</div>
+  <p>Making AI a little easier to understand.</p>
+  <p>Student learning project · Exploring Explainable Artificial Intelligence</p>
+  <a href="#top">↑ Back to top</a>
 </footer>
 
 <script>
 const students = [
-  {
-    name: "Aarav",
-    marks: 82,
-    attendance: 92,
-    activities: 75,
-    income: 45,
-    summary: "Aarav's example has strong marks and attendance."
-  },
-  {
-    name: "Diya",
-    marks: 94,
-    attendance: 74,
-    activities: 86,
-    income: 55,
-    summary: "Diya's example has strong academic marks and activities."
-  },
-  {
-    name: "Kabir",
-    marks: 58,
-    attendance: 61,
-    activities: 48,
-    income: 35,
-    summary: "Kabir's example has lower marks and attendance."
-  }
+  {name:"Aarav", marks:82, attendance:92, activities:75, income:45,
+   summary:"Aarav's example has strong marks and attendance."},
+  {name:"Diya", marks:94, attendance:74, activities:86, income:55,
+   summary:"Diya's example has strong academic marks and activities."},
+  {name:"Kabir", marks:58, attendance:61, activities:48, income:35,
+   summary:"Kabir's example has lower marks and attendance."}
 ];
 
 const studentSelect = document.getElementById("student");
@@ -639,54 +756,64 @@ function drawChart() {
   const p = currentStudent();
   const width = canvas.width;
   const height = canvas.height;
-
   ctx.clearRect(0, 0, width, height);
-  ctx.font = "13px Segoe UI, Arial";
-  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--muted");
-  ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--border");
+
+  const style = getComputedStyle(document.body);
+  const muted = style.getPropertyValue("--muted");
+  const border = style.getPropertyValue("--border");
+  const textColor = style.getPropertyValue("--text");
 
   const left = 55, right = width - 25, top = 25, bottom = height - 48;
   const plotWidth = right - left, plotHeight = bottom - top;
 
+  ctx.font = "13px Segoe UI, Arial";
+  ctx.strokeStyle = border;
+  ctx.fillStyle = muted;
+
   for (let v = 0; v <= 100; v += 20) {
-    const x = left + (v / 100) * plotWidth;
-    const y = bottom - (v / 100) * plotHeight;
+    const x = left + v / 100 * plotWidth;
+    const y = bottom - v / 100 * plotHeight;
 
     ctx.beginPath();
     ctx.moveTo(x, top);
     ctx.lineTo(x, bottom);
     ctx.stroke();
 
-    ctx.fillText(String(v), x - 8, bottom + 22);
-
     ctx.beginPath();
     ctx.moveTo(left, y);
     ctx.lineTo(right, y);
     ctx.stroke();
+
+    ctx.fillText(String(v), x - 8, bottom + 22);
   }
 
-  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--text");
+  ctx.fillStyle = textColor;
   ctx.fillText("Attendance (%) →", width / 2 - 55, height - 8);
 
   ctx.save();
-  ctx.translate(16, height / 2 + 45);
+  ctx.translate(16, height / 2 + 40);
   ctx.rotate(-Math.PI / 2);
   ctx.fillText("Marks (%) →", 0, 0);
   ctx.restore();
 
-  const count = Number(samplesSlider.value);
-  let seed = 2026 + Number(studentSelect.value) * 71 + count;
+  let seed = 2026 + Number(studentSelect.value) * 71 +
+    Number(samplesSlider.value);
 
   function rand() {
     seed = (seed * 16807) % 2147483647;
     return (seed - 1) / 2147483646;
   }
 
+  const count = Number(samplesSlider.value);
+
   for (let i = 0; i < count; i++) {
-    const marks = Math.max(0, Math.min(100, p.marks + (rand() - 0.5) * 42));
-    const attendance = Math.max(0, Math.min(100, p.attendance + (rand() - 0.5) * 42));
-    const x = left + (attendance / 100) * plotWidth;
-    const y = bottom - (marks / 100) * plotHeight;
+    const marks = Math.max(0, Math.min(100,
+      p.marks + (rand() - 0.5) * 42));
+    const attendance = Math.max(0, Math.min(100,
+      p.attendance + (rand() - 0.5) * 42));
+
+    const x = left + attendance / 100 * plotWidth;
+    const y = bottom - marks / 100 * plotHeight;
 
     ctx.beginPath();
     ctx.arc(x, y, 3, 0, Math.PI * 2);
@@ -694,54 +821,60 @@ function drawChart() {
     ctx.fill();
   }
 
-  const sx = left + (p.attendance / 100) * plotWidth;
-  const sy = bottom - (p.marks / 100) * plotHeight;
+  const sx = left + p.attendance / 100 * plotWidth;
+  const sy = bottom - p.marks / 100 * plotHeight;
 
   ctx.beginPath();
   ctx.arc(sx, sy, 8, 0, Math.PI * 2);
-  ctx.fillStyle = "#e5a17d";
+  ctx.fillStyle = "#e7a583";
   ctx.fill();
-
-  ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--text");
+  ctx.strokeStyle = textColor;
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.lineWidth = 1;
 
-  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--text");
-  ctx.fillText(p.name, Math.min(sx + 12, right - 35), Math.max(sy - 12, top + 10));
+  ctx.fillStyle = textColor;
+  ctx.fillText(p.name, Math.min(sx + 12, right - 35),
+    Math.max(sy - 12, top + 10));
 }
 
 function renderExplanation() {
   const p = currentStudent();
-  const nFeatures = Number(featuresSlider.value);
+  const count = Number(featuresSlider.value);
   const score = illustrativeScore(p);
-  const outcome = score >= 65 ? "Likely eligible (illustrative)" : "Needs further review (illustrative)";
+  const outcome = score >= 65
+    ? "Likely eligible (illustrative)"
+    : "Needs further review (illustrative)";
 
   const factors = [
-    { name: "Academic marks", value: (p.marks - 50) * 0.65 },
-    { name: "Attendance", value: (p.attendance - 50) * 0.45 },
-    { name: "Extracurricular activities", value: (p.activities - 50) * 0.30 },
-    { name: "Family income indicator", value: (50 - p.income) * 0.20 }
+    {name:"Academic marks", value:(p.marks - 50) * 0.65},
+    {name:"Attendance", value:(p.attendance - 50) * 0.45},
+    {name:"Extracurricular activities", value:(p.activities - 50) * 0.30},
+    {name:"Family income indicator", value:(50 - p.income) * 0.20}
   ];
 
-  factors.sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
-  const shown = factors.slice(0, nFeatures);
+  factors.sort((a,b) => Math.abs(b.value) - Math.abs(a.value));
+  const shown = factors.slice(0, count);
   const maxValue = Math.max(...shown.map(f => Math.abs(f.value)), 1);
 
   summary.textContent = p.summary + " Illustrative score: " + score + "/100.";
+
   explanation.innerHTML =
     '<div class="status"><strong>Example result:</strong> ' + outcome +
-    '<br><span class="note">This is a fictional, rule-based demonstration.</span></div>' +
+    '<br><span class="note">Fictional educational example only.</span></div>' +
     shown.map(f => {
       const positive = f.value >= 0;
       const percentage = Math.max(4, Math.abs(f.value) / maxValue * 100);
       return '<div class="feature-row">' +
         '<div class="feature-top"><strong>' + f.name + '</strong>' +
-        '<span>' + (positive ? '+' : '−') + Math.abs(f.value).toFixed(1) + '</span></div>' +
-        '<div class="bar-bg"><div class="bar ' + (positive ? '' : 'negative') +
-        '" style="width:' + percentage + '%"></div></div>' +
-        '<div class="note">' + (positive ?
-          'Supports the illustrative score' : 'Reduces the illustrative score') +
+        '<span>' + (positive ? '+' : '−') +
+        Math.abs(f.value).toFixed(1) + '</span></div>' +
+        '<div class="bar-bg"><div class="bar ' +
+        (positive ? '' : 'negative') + '" style="width:' +
+        percentage + '%"></div></div>' +
+        '<div class="note">' + (positive
+          ? 'Supports the illustrative score'
+          : 'Reduces the illustrative score') +
         '</div></div>';
     }).join("");
 }
@@ -756,7 +889,7 @@ document.getElementById("runBtn").addEventListener("click", () => {
   drawChart();
   renderExplanation();
   statusBox.textContent =
-    "Experiment complete! Displaying " + samplesSlider.value +
+    "Experiment complete! Showing " + samplesSlider.value +
     " simulated nearby cases and " + featuresSlider.value +
     " example feature influences.";
 });
@@ -767,7 +900,9 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   featuresSlider.value = "3";
   updateValues();
   drawChart();
-  explanation.innerHTML = '<p class="note">Run the experiment to display the sample explanation.</p>';
+
+  explanation.innerHTML =
+    '<p class="note">Run the experiment to view the illustrative explanation.</p>';
   summary.textContent = "Aarav's example prediction is ready to explore.";
   statusBox.textContent = "Experiment reset. Choose a student and run it again.";
 });
@@ -775,7 +910,8 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 studentSelect.addEventListener("change", () => {
   drawChart();
   summary.textContent = currentStudent().summary;
-  statusBox.textContent = "Student changed. Run the experiment to refresh the explanation.";
+  statusBox.textContent =
+    "Student changed. Run the experiment to refresh the explanation.";
 });
 
 samplesSlider.addEventListener("input", () => {
@@ -793,6 +929,7 @@ document.getElementById("themeBtn").addEventListener("click", () => {
 });
 
 const navLinks = document.querySelectorAll(".navlinks a");
+
 navLinks.forEach(link => {
   link.addEventListener("click", () => {
     navLinks.forEach(item => item.classList.remove("active"));
