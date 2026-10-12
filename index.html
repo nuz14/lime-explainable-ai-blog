@@ -39,6 +39,10 @@ body.dark {
   scroll-behavior: smooth;
 }
 
+html {
+  scroll-padding-top: 85px;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -400,11 +404,16 @@ canvas {
 
 .steps {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
   gap: 20px;
 }
 
 .step-card {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -416,6 +425,7 @@ canvas {
   place-items: center;
   width: 42px;
   height: 42px;
+  flex-shrink: 0;
   border-radius: 14px;
   background: var(--surface-soft);
   color: var(--green);
@@ -426,11 +436,13 @@ canvas {
 .step-card h3 {
   margin: 0 0 10px;
   color: var(--green-dark);
+  min-height: 3.2em;
 }
 
 .step-card p {
-  margin-bottom: 0;
+  margin: 0;
   color: var(--muted);
+  flex-grow: 1;
 }
 
 /* READING LIST */
@@ -527,8 +539,14 @@ footer p {
     padding: 55px 0;
   }
 
-  .two-column, .lab-layout, .steps {
+  .two-column,
+  .lab-layout,
+  .steps {
     grid-template-columns: 1fr;
+  }
+
+  .step-card h3 {
+    min-height: 0;
   }
 
   .card {
@@ -537,7 +555,7 @@ footer p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *, *::before, *::after, html {
     scroll-behavior: auto !important;
     transition: none !important;
   }
@@ -654,9 +672,7 @@ footer p {
         </p>
 
         <div class="control-group">
-          <label for="student">
-            Student example
-          </label>
+          <label for="student">Student example</label>
           <select id="student">
             <option value="Aarav">Aarav · Strong attendance</option>
             <option value="Diya">Diya · Strong academics</option>
@@ -807,7 +823,7 @@ footer p {
     <div class="steps">
       <div class="step-card">
         <div class="step-number">01</div>
-        <h3>Select a prediction</h3>
+        <h3>Select a Prediction</h3>
         <p>
           Start with the specific example whose model prediction
           you want to understand.
@@ -816,7 +832,7 @@ footer p {
 
       <div class="step-card">
         <div class="step-number">02</div>
-        <h3>Create nearby examples</h3>
+        <h3>Create Nearby Examples</h3>
         <p>
           Generate variations of the original input and observe
           how the model's predictions change.
@@ -825,7 +841,7 @@ footer p {
 
       <div class="step-card">
         <div class="step-number">03</div>
-        <h3>Build an explanation</h3>
+        <h3>Build an Explanation</h3>
         <p>
           Fit a simple, interpretable model locally to identify
           features associated with the prediction.
@@ -899,7 +915,7 @@ footer p {
         href="https://github.com/marcotcr/lime#tutorials-and-api"
         target="_blank" rel="noopener noreferrer">
         <div>
-          <strong>LIME Tutorials & API</strong>
+          <strong>LIME Tutorials &amp; API</strong>
           <br>
           <span>Find practical examples and implementation guidance.</span>
         </div>
@@ -984,6 +1000,7 @@ function updateValues() {
 
 function getColors() {
   const styles = getComputedStyle(document.body);
+
   return {
     text: styles.getPropertyValue("--text").trim(),
     muted: styles.getPropertyValue("--muted").trim(),
@@ -1019,7 +1036,8 @@ function drawChart() {
   ctx.lineWidth = 1;
 
   for (let i = 0; i <= 4; i++) {
-    const y = top + (chartHeight * i / 4);
+    const y = top + chartHeight * i / 4;
+
     ctx.beginPath();
     ctx.moveTo(left, y);
     ctx.lineTo(right, y);
@@ -1061,7 +1079,6 @@ function renderExplanation() {
 
   resultStudent.textContent = student;
   predictionLabel.textContent = "Example outcome: " + profile.outcome;
-
   featureBars.innerHTML = "";
 
   visibleFeatures.forEach(([name, influence]) => {
@@ -1084,7 +1101,8 @@ function renderExplanation() {
     track.className = "bar-track";
 
     const bar = document.createElement("div");
-    bar.className = "bar " + (influence >= 0 ? "positive" : "negative");
+    bar.className = "bar " +
+      (influence >= 0 ? "positive" : "negative");
     bar.style.width = Math.abs(influence) + "%";
 
     track.appendChild(bar);
@@ -1099,6 +1117,7 @@ function renderExplanation() {
     " simulated nearby cases. These values are examples, not real model results.";
 }
 
+/* RUN: UPDATE RESULTS, THEN JUMP DIRECTLY TO THEM */
 document.getElementById("runBtn").addEventListener("click", () => {
   updateValues();
   drawChart();
@@ -1109,10 +1128,10 @@ document.getElementById("runBtn").addEventListener("click", () => {
     " simulated nearby cases and " + featuresSlider.value +
     " example feature influences.";
 
+  // Scroll directly to the results without a slow animation.
   document.getElementById("explanation").scrollIntoView({
-    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ? "auto" : "smooth",
-    block: "center"
+    behavior: "auto",
+    block: "start"
   });
 });
 
@@ -1129,7 +1148,7 @@ document.getElementById("resetBtn").addEventListener("click", () => {
     "Experiment reset. Choose your settings and run it again.";
 
   document.getElementById("lab").scrollIntoView({
-    behavior: "smooth",
+    behavior: "auto",
     block: "start"
   });
 });
@@ -1147,6 +1166,7 @@ document.getElementById("themeBtn").addEventListener("click", () => {
 
   const isDark = document.body.classList.contains("dark");
   document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙";
+
   document.getElementById("themeBtn").setAttribute(
     "aria-label",
     isDark ? "Switch to light mode" : "Switch to dark mode"
@@ -1154,6 +1174,9 @@ document.getElementById("themeBtn").addEventListener("click", () => {
 
   drawChart();
 });
+
+// Redraw the chart when the browser window changes size.
+window.addEventListener("resize", drawChart);
 
 // Initial display
 updateValues();
