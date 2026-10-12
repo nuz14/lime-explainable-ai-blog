@@ -4,230 +4,344 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LIME Lab — One Prediction. Look Closer.</title>
+<title>LIME Lab | One Prediction. Look Closer.</title>
 <style>
 :root{
---bg:#f6fbf6;--card:#fff;--ink:#263b32;--muted:#718178;
---green:#52866c;--pale:#dceee1;--peach:#ffe5d5;--border:#e0ebe2;
+--bg:#f7fbf6;--card:#fff;--ink:#293b31;--muted:#718178;
+--green:#56866b;--pale:#dfefe3;--peach:#ffeadc;--border:#e0ebe1;
+--shadow:0 10px 30px #294b3210;
 }
 body.dark{
 --bg:#17251e;--card:#22352a;--ink:#edf7ee;--muted:#b1c4b6;
---green:#a0d5b0;--pale:#304d3b;--peach:#5b4134;--border:#3a5142;
+--green:#a5d7b3;--pale:#304d3b;--peach:#594234;--border:#3a5142;
+--shadow:0 10px 30px #0003;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Segoe UI,Arial,sans-serif;line-height:1.6;transition:.2s}
-nav{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 6%;background:var(--card);border-bottom:1px solid var(--border)}
-.logo{font-weight:850;color:var(--green);font-size:1.12rem;text-decoration:none;white-space:nowrap}
-.navlinks{display:flex;gap:8px;align-items:center}
-.navlinks a,.theme{font-size:.9rem;text-decoration:none;color:var(--muted);padding:8px 12px;border-radius:10px}
+html{scroll-behavior:smooth;scroll-padding-top:85px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Segoe UI,Arial,sans-serif;line-height:1.7;transition:background .2s,color .2s}
+nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 6%;background:var(--card);border-bottom:1px solid var(--border)}
+.logo{color:var(--green);font-size:1.1rem;font-weight:850;text-decoration:none;white-space:nowrap}
+.navlinks{display:flex;gap:7px;align-items:center}
+.navlinks a{font-size:.9rem;text-decoration:none;color:var(--muted);padding:8px 12px;border-radius:10px}
 .navlinks a:hover,.navlinks a.active{background:var(--pale);color:var(--green)}
-.theme{border:1px solid var(--border);background:var(--bg);cursor:pointer;color:var(--ink)}
-.hero{max-width:1200px;margin:auto;padding:72px 6% 55px}
-.eyebrow{color:var(--green);font-size:.77rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
-h1{font-size:clamp(2.7rem,6vw,4.8rem);line-height:1.06;letter-spacing:-2px;margin:15px 0}
-h2{line-height:1.2;letter-spacing:-.6px}
-.hero p{font-size:1.08rem;color:var(--muted);max-width:690px}
-.pill{display:inline-block;padding:6px 12px;border-radius:30px;background:var(--pale);color:var(--green);font-weight:750;font-size:.82rem}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
-.btn{display:inline-block;padding:12px 17px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--ink);font-weight:750;text-decoration:none;cursor:pointer}
-.btn.primary{background:var(--green);color:#fff;border-color:var(--green)}
-.btn:hover{filter:brightness(.96)}
-.wrap{max-width:1200px;margin:auto;padding:0 6% 70px}
+.theme{height:39px;width:42px;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--ink);font-size:1.15rem;cursor:pointer}
+.hero,.wrap{max-width:1180px;margin:auto;padding-left:6%;padding-right:6%}
+.hero{padding-top:70px;padding-bottom:54px}
+.eyebrow{font-size:.77rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--green)}
+h1{font-size:clamp(2.6rem,6vw,4.5rem);letter-spacing:-2px;line-height:1.1;margin:15px 0}
+h2{font-size:clamp(1.5rem,3vw,2rem);line-height:1.25;letter-spacing:-.5px}
+h3{line-height:1.3}
+.hero p{max-width:750px;font-size:1.08rem;color:var(--muted)}
+.pill{display:inline-block;padding:6px 12px;border-radius:30px;background:var(--pale);color:var(--green);font-size:.82rem;font-weight:750}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{display:inline-block;padding:11px 17px;border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--ink);background:var(--card);font-weight:750;cursor:pointer}
+.btn.primary{background:var(--green);color:white;border-color:var(--green)}
+.wrap{padding-bottom:70px}
 .sectionhead{margin:30px 0 20px}
 .sectionhead p{color:var(--muted)}
-.lab{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
-.panel{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:23px;min-width:0;box-shadow:0 12px 35px #254b3210}
-.panel h3{margin-top:0}
-.muted{color:var(--muted);font-size:.91rem}
-.field{margin-top:20px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:23px;box-shadow:var(--shadow);min-width:0}
+.introgrid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.introcard{padding:21px;background:var(--card);border:1px solid var(--border);border-radius:17px}
+.introcard p{color:var(--muted);margin-bottom:0}
+.labgrid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:start}
+.muted{color:var(--muted);font-size:.92rem}
+.field{margin-top:19px}
 label{display:block;font-size:.9rem;font-weight:750;margin-bottom:7px}
-select{width:100%;padding:11px;border-radius:11px;background:var(--bg);color:var(--ink);border:1px solid var(--border)}
+select{width:100%;padding:11px;border:1px solid var(--border);border-radius:11px;background:var(--bg);color:var(--ink)}
 input[type=range]{width:100%;accent-color:var(--green)}
 .rangehead{display:flex;justify-content:space-between;gap:10px}
-.value{font-weight:800;color:var(--green)}
-.primarybtn{width:100%;padding:14px;border:0;border-radius:13px;background:var(--green);color:white;font-weight:800;font-size:.97rem;cursor:pointer;margin-top:22px}
+.value{color:var(--green);font-weight:800}
+.primarybtn{width:100%;margin-top:22px;padding:14px;border:0;border-radius:12px;background:var(--green);color:#fff;font-size:.96rem;font-weight:800;cursor:pointer}
 .primarybtn:disabled{opacity:.65;cursor:wait}
 .secondary{width:100%;padding:11px;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--ink);cursor:pointer;margin-top:10px}
-.note{background:var(--pale);padding:13px;border-radius:12px;font-size:.87rem;margin-top:17px}
-.prediction{display:flex;align-items:center;gap:13px;margin:18px 0;padding:16px;border-radius:15px;background:var(--bg);border:1px solid var(--border)}
-.pred-icon{font-size:2rem}
+.note{margin-top:17px;padding:13px;border-radius:12px;background:var(--pale);font-size:.88rem}
+.prediction{display:flex;align-items:center;gap:13px;padding:15px;margin:17px 0;border:1px solid var(--border);border-radius:14px;background:var(--bg)}
+.predicon{font-size:2rem}
 .prediction strong{display:block;font-size:1.2rem}
-.metricrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
-.metric{padding:13px;background:var(--bg);border:1px solid var(--border);border-radius:13px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}
+.metric{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--bg)}
 .metric small{display:block;color:var(--muted)}
-.metric strong{font-size:1.2rem}
-.status{display:flex;align-items:flex-start;gap:10px;background:var(--peach);padding:14px;border-radius:13px;margin:18px 0}
+.metric strong{font-size:1.15rem}
+.status{margin:17px 0;padding:14px;border-radius:12px;background:var(--peach)}
 .status strong{display:block}
-.status p{margin:3px 0 0;font-size:.9rem}
+.status p{margin:4px 0 0;font-size:.9rem}
 .status[hidden]{display:none}
-.plotwrap{border:1px solid var(--border);border-radius:16px;padding:10px;background:var(--bg);margin-top:12px}
+.plotwrap{margin-top:12px;padding:10px;border:1px solid var(--border);border-radius:15px;background:var(--bg)}
 svg{display:block;width:100%;height:auto}
-.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin:10px 3px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 3px;color:var(--muted);font-size:.83rem}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
 .feature{margin:17px 0}
-.featuretop{display:flex;justify-content:space-between;gap:10px;font-size:.9rem;font-weight:750}
-.bartrack{height:12px;background:var(--bg);border-radius:20px;overflow:hidden;margin-top:7px}
-.bar{height:100%;border-radius:20px;transition:width .5s}
-.positive{background:#63a87b}.negative{background:#e89b76}
-.reason{font-size:.85rem;color:var(--muted);margin-top:4px}
-.empty{padding:23px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:15px}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.step{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
-.step .num{font-size:1.6rem}
+.featuretop{display:flex;justify-content:space-between;gap:10px;font-size:.91rem;font-weight:750}
+.bartrack{height:12px;margin-top:7px;border-radius:20px;background:var(--bg);overflow:hidden}
+.bar{height:100%;border-radius:20px;transition:width .4s}
+.positive{background:#62a77b}.negative{background:#e59a76}
+.empty{padding:20px;text-align:center;border:1px dashed var(--border);border-radius:13px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.step{padding:21px;border:1px solid var(--border);border-radius:17px;background:var(--card)}
 .step p{color:var(--muted);font-size:.92rem}
-footer{text-align:center;padding:28px 6%;border-top:1px solid var(--border);color:var(--muted);font-size:.86rem}
-@media(max-width:850px){.lab{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.hero{padding-top:48px}}
-@media(max-width:560px){nav{padding:12px 4%;flex-wrap:wrap}.navlinks{width:100%;justify-content:space-between;gap:2px}.navlinks a,.theme{padding:7px;font-size:.82rem}.hero,.wrap{padding-left:5%;padding-right:5%}.metricrow{grid-template-columns:1fr}.panel{padding:17px}}
+.reference{padding:17px 0;border-bottom:1px solid var(--border)}
+.reference:last-child{border-bottom:0}
+.reference a{color:var(--green);font-weight:750;text-decoration:none}
+.reference a:hover{text-decoration:underline}
+footer{padding:27px 6%;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.87rem}
+@media(max-width:850px){.labgrid{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.hero{padding-top:48px}}
+@media(max-width:580px){nav{padding:12px 4%;flex-wrap:wrap}.navlinks{gap:2px}.navlinks a{padding:7px;font-size:.82rem}.hero,.wrap{padding-left:5%;padding-right:5%}.introgrid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}.panel{padding:17px}}
 </style>
 </head>
 <body>
+
 <nav>
 <a class="logo" href="#home">🌿 LIME Lab</a>
 <div class="navlinks">
 <a href="#home" class="active">Home</a>
 <a href="#lab">Lab</a>
 <a href="#how">How It Works</a>
-<button class="theme" id="themeBtn">🌙 Theme</button>
+<button class="theme" id="themeBtn" aria-label="Switch colour theme" title="Switch colour theme">🌙</button>
 </div>
 </nav>
 
 <header class="hero" id="home">
-<span class="pill">INTERACTIVE EXPLAINABLE AI</span>
-<h1>One prediction.<br>Look closer. 🔎</h1>
-<p>Why did a machine-learning model make a particular prediction? Explore LIME, an explainable AI technique that investigates one prediction by studying nearby examples and building a simpler local explanation.</p>
-<div class="eyebrow">Explore one case · Discover its local explanation</div>
-<div class="hero-actions">
-<a class="btn primary" href="#lab">🌱 Open the LIME Lab</a>
-<a class="btn" href="#how">Learn how it works ↓</a>
+<span class="pill">STUDENT TECHNICAL BLOG · EXPLAINABLE AI</span>
+<h1>Understanding<br>One Prediction 🌱</h1>
+<p>Machine-learning models can make predictions without clearly showing why. LIME helps us investigate an individual prediction and understand which features may have influenced it.</p>
+<p>This blog introduces the idea behind LIME through a simple scholarship eligibility example and an interactive experiment.</p>
+<div class="actions">
+<a class="btn primary" href="#lab">🧪 Explore the experiment</a>
+<a class="btn" href="#how">Read the explanation ↓</a>
 </div>
 </header>
 
 <main class="wrap">
-<div class="sectionhead" id="lab">
-<div class="eyebrow">Your experiment</div>
+
+<section id="introduction">
+<div class="sectionhead">
+<div class="eyebrow">01 · Introduction</div>
+<h2>What is LIME?</h2>
+</div>
+<div class="introgrid">
+<article class="introcard">
+<h3>🔍 The problem</h3>
+<p>A machine-learning model might predict that a student is eligible for a scholarship. The result alone does not explain which details influenced that prediction.</p>
+</article>
+<article class="introcard">
+<h3>🌿 The LIME idea</h3>
+<p>LIME studies one selected prediction, creates nearby variations of that example, and uses a simpler explanation to approximate the model's behaviour around it.</p>
+</article>
+<article class="introcard">
+<h3>🎯 Why local explanations?</h3>
+<p>A model can behave differently for different examples. Understanding one case can be more useful than receiving only a general description of the entire model.</p>
+</article>
+<article class="introcard">
+<h3>📚 What this blog demonstrates</h3>
+<p>A fictional scholarship eligibility example shows how nearby examples and feature influences can help explain an individual prediction.</p>
+</article>
+</div>
+</section>
+
+<section id="lab">
+<div class="sectionhead">
+<div class="eyebrow">02 · Practical experiment</div>
 <h2>🧪 Local Explanation Lab</h2>
-<p>Select a fictional loan applicant, generate nearby examples, and inspect the features influencing the simulated prediction.</p>
+<p><strong>Experiment question:</strong> Why might a fictional student receive an eligible or not-eligible scholarship prediction?</p>
+<p>Change the student profile and experiment settings. Run the experiment to generate a graph and an explanation of the strongest simulated feature influences.</p>
 </div>
 
-<div class="lab">
+<div class="labgrid">
 <aside class="panel">
 <h3>🎛️ Experiment controls</h3>
-<p class="muted">Change the settings, then run your experiment.</p>
+<p class="muted">The names below are example profiles, not the topic of the blog. The topic is LIME and local explanations.</p>
 
 <div class="field">
-<label for="applicant">Choose an applicant</label>
-<select id="applicant">
-<option value="balanced">Alex · Balanced profile</option>
-<option value="strong">Maya · Strong credit profile</option>
-<option value="risky">Sam · High debt profile</option>
+<label for="student">Example student profile</label>
+<select id="student">
+<option value="balanced">Aarav · Mixed profile</option>
+<option value="strong">Diya · Strong profile</option>
+<option value="support">Kabir · Needs support</option>
 </select>
 </div>
 
 <div class="field">
-<div class="rangehead"><label for="samples">Nearby samples</label><span class="value" id="samplesVal">100</span></div>
+<div class="rangehead"><label for="samples">Nearby examples</label><span class="value" id="samplesVal">100</span></div>
 <input id="samples" type="range" min="40" max="240" step="20" value="100">
-<div class="muted">Number of nearby examples to generate.</div>
+<p class="muted">Controls how many nearby examples appear in the graph.</p>
 </div>
 
 <div class="field">
-<div class="rangehead"><label for="features">Features to display</label><span class="value" id="featuresVal">4</span></div>
+<div class="rangehead"><label for="features">Features to explain</label><span class="value" id="featuresVal">4</span></div>
 <input id="features" type="range" min="2" max="4" step="1" value="4">
-<div class="muted">Choose how many local influences to show.</div>
+<p class="muted">Choose how many feature influences to display in the results.</p>
 </div>
 
 <button class="primarybtn" id="runBtn">✨ Run Local Explanation</button>
-<button class="secondary" id="resetBtn">↺ Reset Experiment</button>
+<button class="secondary" id="resetBtn">↺ Reset experiment</button>
 
-<div class="note"><strong>📍 Where does it run?</strong><br>Click the green button above. The experiment runs directly in this webpage. Your results will appear in the <strong>Experiment Results</strong> section on the right, below the graph.</div>
+<div class="note">
+<strong>📍 Where do I see the result?</strong><br>
+Click <strong>Run Local Explanation</strong>. A status message will appear in the results panel. The graph and feature explanation will appear directly below it.
+</div>
 </aside>
 
 <section class="panel" id="results">
 <div class="eyebrow">Experiment workspace</div>
-<h3>📍 Your selected prediction</h3>
-<p class="muted">This is the individual case that the local explanation investigates.</p>
+<h3>📍 Selected prediction</h3>
+<p class="muted">This is the one student profile being investigated.</p>
 
 <div class="prediction">
-<div class="pred-icon" id="predIcon">🧑‍💼</div>
+<div class="predicon" id="predIcon">🎓</div>
 <div>
-<span class="muted">Simulated model decision</span>
-<strong id="predLabel">Loan approved</strong>
-<span class="muted" id="predText">Alex's example is ready to investigate.</span>
+<span class="muted">Simulated model result</span>
+<strong id="predLabel">Scholarship eligible</strong>
+<span class="muted" id="predText">Aarav's example is ready to investigate.</span>
 </div>
 </div>
 
-<div class="metricrow">
-<div class="metric"><small>Approval score</small><strong id="scoreMetric">72%</strong></div>
+<div class="metrics">
+<div class="metric"><small>Eligibility score</small><strong id="scoreMetric">—</strong></div>
 <div class="metric"><small>Nearby examples</small><strong id="sampleMetric">—</strong></div>
 <div class="metric"><small>Features shown</small><strong id="featureMetric">—</strong></div>
 </div>
 
 <div class="status" id="status" hidden role="status" aria-live="polite">
-<div style="font-size:1.3rem" id="statusIcon">✅</div>
-<div><strong id="statusTitle">Experiment complete!</strong><p id="statusText">Your results are displayed below.</p></div>
+<strong id="statusTitle">Experiment complete</strong>
+<p id="statusText">Your results appear below.</p>
 </div>
 
-<h3>🗺️ Local neighbourhood graph</h3>
-<p class="muted">Each dot represents a generated nearby example. The highlighted dot is your selected applicant.</p>
+<h3>🗺️ Nearby examples</h3>
+<p class="muted">Each dot represents a simulated nearby student profile. The highlighted point represents the student you selected. The axes show marks and attendance.</p>
 <div class="plotwrap">
-<svg id="plot" viewBox="0 0 560 300" role="img" aria-label="Graph of nearby applicant examples"></svg>
+<svg id="plot" viewBox="0 0 560 300" role="img" aria-label="Graph showing nearby scholarship example profiles"></svg>
 </div>
 <div class="legend">
-<span><i class="dot" style="background:#63a87b"></i>Approval region</span>
-<span><i class="dot" style="background:#e89b76"></i>Rejection region</span>
-<span><i class="dot" style="background:var(--green);border:2px solid var(--ink)"></i>Selected applicant</span>
+<span><i class="dot" style="background:#62a77b"></i>Eligible region</span>
+<span><i class="dot" style="background:#e59a76"></i>Not-eligible region</span>
+<span><i class="dot" style="background:var(--green);border:2px solid var(--ink)"></i>Selected student</span>
 </div>
-<div class="muted" id="plotCaption">Choose your settings and click Run Local Explanation.</div>
+<p class="muted" id="plotCaption">Run the experiment to generate nearby examples.</p>
 
-<div style="margin-top:30px">
+<div style="margin-top:28px">
 <div class="eyebrow">Experiment results</div>
-<h3>🔬 Why did this prediction happen?</h3>
-<p class="muted" id="explainIntro">Your local feature explanation will appear here after you run the experiment.</p>
-<div id="featureBars"><div class="empty">🌱 Waiting for your experiment. Click <strong>Run Local Explanation</strong> in the controls panel.</div></div>
+<h3>🔬 What influenced the prediction?</h3>
+<p class="muted" id="explainIntro">Run the experiment to view the strongest simulated feature influences for this student.</p>
+<div id="featureBars"><div class="empty">🌱 Your local explanation will appear here after you run the experiment.</div></div>
 </div>
 </section>
 </div>
+</section>
 
-<div class="sectionhead" id="how">
-<div class="eyebrow">Understand the process</div>
-<h2>How does LIME work? 🌼</h2>
-<p>LIME stands for Local Interpretable Model-agnostic Explanations.</p>
+<section id="how">
+<div class="sectionhead">
+<div class="eyebrow">03 · Understanding the method</div>
+<h2>How does LIME work?</h2>
+<p>LIME stands for <strong>Local Interpretable Model-agnostic Explanations</strong>.</p>
 </div>
-
 <div class="steps">
-<article class="step"><div class="num">① 🧍</div><h3>Select one prediction</h3><p>Begin with one individual prediction from a model, such as a fictional loan application.</p></article>
-<article class="step"><div class="num">② 🫧</div><h3>Generate nearby examples</h3><p>Create variations of the selected case and observe how the model's predictions change around it.</p></article>
-<article class="step"><div class="num">③ 💡</div><h3>Build a local explanation</h3><p>Approximate the model's behaviour near that case using a simpler, interpretable explanation.</p></article>
+<article class="step">
+<div style="font-size:1.6rem">① 🎯</div>
+<h3>Select one prediction</h3>
+<p>Choose an individual prediction, such as a scholarship eligibility result, that you want to understand.</p>
+</article>
+<article class="step">
+<div style="font-size:1.6rem">② 🫧</div>
+<h3>Create nearby examples</h3>
+<p>Make variations around the selected example and observe how the underlying model responds to them.</p>
+</article>
+<article class="step">
+<div style="font-size:1.6rem">③ 💡</div>
+<h3>Build a local explanation</h3>
+<p>Use a simpler, interpretable model to approximate the complex model's behaviour near the selected example.</p>
+</article>
 </div>
+</section>
 
-<div class="panel" style="margin-top:22px">
-<h3>🌿 Why is LIME useful?</h3>
-<p class="muted">Complex machine-learning models can be difficult to interpret. LIME helps make an individual prediction easier to investigate by explaining the model's behaviour around that specific example. It does not automatically prove that a prediction is correct or fair.</p>
-<p><a class="textlink" href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">Explore the official LIME project on GitHub ↗</a></p>
+<section id="interpretation">
+<div class="sectionhead">
+<div class="eyebrow">04 · Reading the results</div>
+<h2>How should you interpret the graph?</h2>
 </div>
+<div class="introgrid">
+<article class="introcard">
+<h3>🟢 Eligible region</h3>
+<p>Green dots represent simulated nearby profiles whose eligibility score is above the example decision threshold.</p>
+</article>
+<article class="introcard">
+<h3>🟠 Not-eligible region</h3>
+<p>Peach dots represent simulated profiles whose eligibility score is below the example threshold.</p>
+</article>
+<article class="introcard">
+<h3>📊 Feature influences</h3>
+<p>Positive values support the eligible result in this demonstration. Negative values work against it. The bars are illustrative, not real model coefficients.</p>
+</article>
+<article class="introcard">
+<h3>⚠️ A limitation to remember</h3>
+<p>LIME explanations approximate local model behaviour. They do not prove that a prediction is correct, fair, or based on a real scholarship policy.</p>
+</article>
+</div>
+</section>
+
+<section id="conclusion">
+<div class="sectionhead">
+<div class="eyebrow">05 · Conclusion</div>
+<h2>Why is LIME useful? 🌼</h2>
+</div>
+<div class="panel">
+<p>LIME helps make complex machine-learning predictions easier to investigate by explaining behaviour around one selected example. It can help people understand which features appear influential and ask better questions about a model's decisions.</p>
+<p>This interactive blog uses a simplified simulation to demonstrate the concept. A real LIME experiment would use a trained machine-learning model and the LIME Python library to generate explanations from actual predictions.</p>
+</div>
+</section>
+
+<section id="references">
+<div class="sectionhead">
+<div class="eyebrow">06 · Further reading</div>
+<h2>Research & useful links 📖</h2>
+<p>Explore the original research and the official project to learn more about the method.</p>
+</div>
+<div class="panel">
+<div class="reference">
+<h3>📄 Original research paper</h3>
+<p><em>“Why Should I Trust You?”: Explaining the Predictions of Any Classifier</em> by Marco Tulio Ribeiro, Sameer Singh, and Carlos Guestrin (2016).</p>
+<a href="https://doi.org/10.1145/2939672.2939778" target="_blank" rel="noopener">Read the research paper via ACM ↗</a>
+</div>
+<div class="reference">
+<h3>💻 Official LIME project</h3>
+<p>The source repository includes the Python package, examples, and explanations of how LIME works.</p>
+<a href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">Explore LIME on GitHub ↗</a>
+</div>
+<div class="reference">
+<h3>🧑‍💻 Official tutorials</h3>
+<p>Examples show how LIME can explain predictions from text classifiers, tabular data, and image classifiers.</p>
+<a href="https://github.com/marcotcr/lime#tutorials-and-api" target="_blank" rel="noopener">Browse LIME tutorials and API ↗</a>
+</div>
+<div class="reference">
+<h3>📚 Research preprint</h3>
+<p>Find the paper's preprint and additional information about the original method.</p>
+<a href="https://arxiv.org/abs/1602.04938" target="_blank" rel="noopener">Read the paper on arXiv ↗</a>
+</div>
+</div>
+</section>
+
 </main>
 
-<footer>🌿 LIME Lab · Interactive Explainable AI Learning Project</footer>
+<footer>
+🌿 LIME Lab · Student Technical Blog · Learning Explainable Artificial Intelligence
+</footer>
 
 <script>
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-const profiles = {
- balanced:{name:"Alex",credit:690,debt:42,income:65,employment:5},
- strong:{name:"Maya",credit:790,debt:18,income:82,employment:8},
- risky:{name:"Sam",credit:590,debt:78,income:43,employment:2}
+const profiles={
+ balanced:{name:"Aarav",marks:72,attendance:78,income:55,activities:60},
+ strong:{name:"Diya",marks:91,attendance:94,income:45,activities:85},
+ support:{name:"Kabir",marks:55,attendance:61,income:80,activities:35}
 };
-
 let hasRun=false;
+let runToken=0;
 
-function scoreModel(p){
- return Math.max(3,Math.min(97,
-  50+(p.credit-680)*.16-(p.debt-40)*.48+
-  (p.income-60)*.20+(p.employment-4)*1.25
+function eligibility(p){
+ return Math.max(5,Math.min(95,
+  0.55*p.marks+0.25*p.attendance+0.12*p.activities-0.18*p.income+15
  ));
 }
-
-function getProfile(){return profiles[$("applicant").value]}
+function profile(){return profiles[$("student").value]}
 
 function updateLabels(){
  $("samplesVal").textContent=$("samples").value;
@@ -235,98 +349,95 @@ function updateLabels(){
  if(hasRun)runExperiment();
 }
 
-function renderPlot(p,n){
- const svg=$("plot"),W=560,H=300,left=54,right=18,top=20,bottom=42;
- const pw=W-left-right,ph=H-top-bottom;
- const xm=c=>left+(c-500)/350*pw;
- const ym=d=>top+d/100*ph;
- let s=`<rect x="${left}" y="${top}" width="${pw}" height="${ph}" rx="8" fill="var(--card)" stroke="var(--border)"/>`;
-
- for(let c=500;c<=850;c+=70){
-  let x=xm(c);
-  s+=`<line x1="${x}" y1="${top}" x2="${x}" y2="${top+ph}" stroke="var(--border)" stroke-dasharray="3 5"/>`;
-  s+=`<text x="${x}" y="${H-18}" text-anchor="middle" fill="var(--muted)" font-size="11">${c}</text>`;
- }
- for(let d=0;d<=100;d+=25){
-  let y=ym(d);
-  s+=`<line x1="${left}" y1="${y}" x2="${left+pw}" y2="${y}" stroke="var(--border)" stroke-dasharray="3 5"/>`;
-  s+=`<text x="${left-9}" y="${y+4}" text-anchor="end" fill="var(--muted)" font-size="11">${d}%</text>`;
- }
-
- let path="";
- for(let c=500;c<=850;c+=5){
-  const debt=Math.max(0,Math.min(100,47+(c-680)*.11));
-  path+=(c===500?"M":"L")+xm(c)+" "+ym(debt)+" ";
- }
- s+=`<path d="${path}" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-dasharray="7 5"/>`;
-
- let approved=0,rejected=0;
- for(let i=0;i<n;i++){
-  const u=(Math.sin((i+1)*12.9898)*43758.5453)%1;
-  const v=(Math.sin((i+1)*78.233+9)*12345.6789)%1;
-  const credit=Math.max(500,Math.min(850,p.credit+u*190));
-  const debt=Math.max(0,Math.min(100,p.debt+v*52));
-  const nearby={credit,debt,income:Math.max(20,Math.min(100,p.income+(u-v)*28)),employment:Math.max(0,p.employment+(v-u)*8)};
-  const ok=scoreModel(nearby)>=50;
-  if(ok)approved++;else rejected++;
-  s+=`<circle cx="${xm(credit)}" cy="${ym(debt)}" r="3.3" fill="${ok?"#63a87b":"#e89b76"}" opacity=".72"><title>Nearby example: ${ok?"approval":"rejection"} region</title></circle>`;
- }
-
- const cx=xm(p.credit),cy=ym(p.debt);
- s+=`<circle cx="${cx}" cy="${cy}" r="8" fill="var(--green)" stroke="var(--ink)" stroke-width="3"><title>Selected applicant: ${p.name}</title></circle>`;
- s+=`<text x="${Math.min(W-95,cx+12)}" y="${Math.max(16,cy-12)}" fill="var(--ink)" font-size="12" font-weight="700">${p.name}</text>`;
- s+=`<text x="${left+pw/2}" y="${H-2}" text-anchor="middle" fill="var(--muted)" font-size="12">Credit score →</text>`;
- s+=`<text x="14" y="${top+ph/2}" transform="rotate(-90 14 ${top+ph/2})" text-anchor="middle" fill="var(--muted)" font-size="12">Debt ratio →</text>`;
- svg.innerHTML=s;
- $("plotCaption").textContent=`Generated ${n} nearby examples: ${approved} in the approval region and ${rejected} in the rejection region. The highlighted point is ${p.name}.`;
+function random01(seed){
+ const x=Math.sin(seed*12.9898+78.233)*43758.5453;
+ return x-Math.floor(x);
 }
 
-function getLocalFeatures(p){
+function drawPlot(p,n){
+ const svg=$("plot"),W=560,H=300,left=52,right=18,top=18,bottom=43;
+ const pw=W-left-right,ph=H-top-bottom;
+ const xm=m=>left+(m/100)*pw;
+ const ym=a=>top+ph-(a/100)*ph;
+ let s=`<rect x="${left}" y="${top}" width="${pw}" height="${ph}" rx="8" fill="var(--card)" stroke="var(--border)"/>`;
+
+ for(let v=0;v<=100;v+=20){
+  const x=xm(v),y=ym(v);
+  s+=`<line x1="${x}" y1="${top}" x2="${x}" y2="${top+ph}" stroke="var(--border)" stroke-dasharray="3 5"/>`;
+  s+=`<line x1="${left}" y1="${y}" x2="${left+pw}" y2="${y}" stroke="var(--border)" stroke-dasharray="3 5"/>`;
+  s+=`<text x="${x}" y="${H-18}" text-anchor="middle" fill="var(--muted)" font-size="11">${v}</text>`;
+  s+=`<text x="${left-9}" y="${y+4}" text-anchor="end" fill="var(--muted)" font-size="11">${v}</text>`;
+ }
+ let boundary="";
+ for(let m=0;m<=100;m+=2){
+  const attendance=62-(m-65)*.35;
+  boundary+=(m===0?"M":"L")+xm(m)+" "+ym(Math.max(0,Math.min(100,attendance)))+" ";
+ }
+ s+=`<path d="${boundary}" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-dasharray="7 5"/>`;
+
+ let eligible=0,notEligible=0;
+ for(let i=1;i<=n;i++){
+  const marks=Math.max(0,Math.min(100,p.marks+(random01(i*2)-.5)*40));
+  const attendance=Math.max(0,Math.min(100,p.attendance+(random01(i*3)-.5)*40));
+  const near={marks,attendance,income:Math.max(0,Math.min(100,p.income+(random01(i*4)-.5)*25)),activities:Math.max(0,Math.min(100,p.activities+(random01(i*5)-.5)*30))};
+  const ok=eligibility(near)>=60;
+  if(ok)eligible++;else notEligible++;
+  s+=`<circle cx="${xm(marks)}" cy="${ym(attendance)}" r="3.4" fill="${ok?"#62a77b":"#e59a76"}" opacity=".72"><title>Nearby example: ${ok?"eligible":"not eligible"}</title></circle>`;
+ }
+ const cx=xm(p.marks),cy=ym(p.attendance);
+ s+=`<circle cx="${cx}" cy="${cy}" r="8" fill="var(--green)" stroke="var(--ink)" stroke-width="3"><title>Selected student: ${p.name}</title></circle>`;
+ s+=`<text x="${Math.min(W-90,cx+12)}" y="${Math.max(16,cy-12)}" fill="var(--ink)" font-size="12" font-weight="700">${p.name}</text>`;
+ s+=`<text x="${left+pw/2}" y="${H-2}" text-anchor="middle" fill="var(--muted)" font-size="12">Marks (%) →</text>`;
+ s+=`<text x="13" y="${top+ph/2}" transform="rotate(-90 13 ${top+ph/2})" text-anchor="middle" fill="var(--muted)" font-size="12">Attendance (%) →</text>`;
+ svg.innerHTML=s;
+ $("plotCaption").textContent=`${n} nearby examples generated: ${eligible} fall in the eligible region and ${notEligible} fall in the not-eligible region.`;
+}
+
+function localFeatures(p){
  return [
-  {name:"Credit score",value:(p.credit-680)*.16,detail:`Credit score: ${p.credit}`},
-  {name:"Debt ratio",value:-(p.debt-40)*.48,detail:`Debt ratio: ${p.debt}%`},
-  {name:"Annual income",value:(p.income-60)*.20,detail:`Income index: ${p.income}`},
-  {name:"Employment history",value:(p.employment-4)*1.25,detail:`Employment: ${p.employment} years`}
+  {name:"Academic marks",value:(p.marks-60)*.55,detail:`Marks: ${p.marks}%`},
+  {name:"Class attendance",value:(p.attendance-65)*.25,detail:`Attendance: ${p.attendance}%`},
+  {name:"Extracurricular activities",value:(p.activities-50)*.12,detail:`Activity score: ${p.activities}/100`},
+  {name:"Family income indicator",value:-(p.income-50)*.18,detail:`Illustrative income indicator: ${p.income}`}
  ].sort((a,b)=>Math.abs(b.value)-Math.abs(a.value));
 }
 
 function runExperiment(){
- const p=getProfile(),n=Number($("samples").value),k=Number($("features").value);
- const score=Math.round(scoreModel(p));
+ const token=++runToken;
+ const p=profile(),n=Number($("samples").value),k=Number($("features").value);
+ const score=Math.round(eligibility(p));
  hasRun=true;
-
  $("runBtn").disabled=true;
  $("runBtn").textContent="⏳ Running experiment...";
  $("status").hidden=false;
- $("statusIcon").textContent="🧪";
- $("statusTitle").textContent="Running in the Local Explanation Lab";
- $("statusText").textContent="Generating nearby cases and preparing the local explanation...";
+ $("statusTitle").textContent="Experiment is running...";
+ $("statusText").textContent="Generating nearby student examples and preparing the explanation.";
 
- // The work is local browser computation; show an explicit running state before results.
  setTimeout(()=>{
-  $("predIcon").textContent=score>=50?"✅":"⚠️";
-  $("predLabel").textContent=score>=50?"Loan approved":"Loan rejected";
-  $("predText").textContent=`${p.name}'s simulated approval score is ${score}%.`;
+  if(token!==runToken)return;
+  $("predIcon").textContent=score>=60?"🎓":"📝";
+  $("predLabel").textContent=score>=60?"Scholarship eligible":"Not eligible in this example";
+  $("predText").textContent=`${p.name}'s simulated eligibility score is ${score}%.`;
   $("scoreMetric").textContent=score+"%";
   $("sampleMetric").textContent=n;
   $("featureMetric").textContent=k;
-  renderPlot(p,n);
+  drawPlot(p,n);
 
-  const selected=getLocalFeatures(p).slice(0,k);
-  const max=Math.max(1,...selected.map(f=>Math.abs(f.value)));
-  $("explainIntro").textContent=`Local explanation for ${p.name}: these ${k} features have the strongest simulated influence around this selected case. Positive values support approval; negative values work against approval.`;
-  $("featureBars").innerHTML=selected.map(f=>{
-   const positive=f.value>=0,width=Math.max(4,Math.abs(f.value)/max*100);
+  const features=localFeatures(p).slice(0,k);
+  const max=Math.max(1,...features.map(f=>Math.abs(f.value)));
+  $("explainIntro").textContent=`For ${p.name}'s selected prediction, these ${k} features have the strongest simulated influences. Positive values support eligibility; negative values work against it.`;
+  $("featureBars").innerHTML=features.map(f=>{
+   const positive=f.value>=0;
+   const width=Math.max(4,Math.abs(f.value)/max*100);
    return `<div class="feature">
     <div class="featuretop"><span>${f.name}</span><span>${positive?"+":"−"}${Math.abs(f.value).toFixed(1)}</span></div>
     <div class="bartrack"><div class="bar ${positive?"positive":"negative"}" style="width:${width}%"></div></div>
-    <div class="reason">${f.detail} · ${positive?"Supports approval":"Works against approval"}</div>
+    <div class="muted">${f.detail} · ${positive?"Supports eligibility":"Works against eligibility"}</div>
    </div>`;
-  }).join("")+`<div class="note">These feature values are illustrative teaching scores, not coefficients learned by the official LIME library or a real loan model.</div>`;
+  }).join("")+`<div class="note">These are illustrative feature scores in a browser-based learning simulation. They are not coefficients produced by the official LIME package.</div>`;
 
-  $("statusIcon").textContent="✅";
-  $("statusTitle").textContent="Experiment complete!";
-  $("statusText").textContent="Your graph and local feature explanation are ready below. Scroll down within this panel to inspect the feature results.";
+  $("statusTitle").textContent="✅ Experiment complete!";
+  $("statusText").textContent="Your graph and local explanation are ready below. Scroll down to the feature influence bars to read the result.";
   $("runBtn").disabled=false;
   $("runBtn").textContent="✨ Run Local Explanation";
   $("results").scrollIntoView({behavior:"smooth",block:"start"});
@@ -336,43 +447,45 @@ function runExperiment(){
 $("runBtn").addEventListener("click",runExperiment);
 $("samples").addEventListener("input",updateLabels);
 $("features").addEventListener("input",updateLabels);
-$("applicant").addEventListener("change",()=>{
- if(hasRun)runExperiment();
- else{
-  const p=getProfile(),score=Math.round(scoreModel(p));
-  $("predIcon").textContent=score>=50?"🧑‍💼":"⚠️";
-  $("predLabel").textContent=score>=50?"Loan approved":"Loan rejected";
-  $("predText").textContent=`${p.name}'s simulated approval score is ${score}%. Click Run Local Explanation to inspect this case.`;
-  $("scoreMetric").textContent=score+"%";
- }
+$("student").addEventListener("change",()=>{
+ if(hasRun){runExperiment();return}
+ const p=profile(),score=Math.round(eligibility(p));
+ $("predIcon").textContent=score>=60?"🎓":"📝";
+ $("predLabel").textContent=score>=60?"Scholarship eligible":"Not eligible in this example";
+ $("predText").textContent=`${p.name}'s simulated eligibility score is ${score}%. Run the experiment to inspect the result.`;
+ $("scoreMetric").textContent=score+"%";
 });
 $("resetBtn").addEventListener("click",()=>{
+ runToken++;
  hasRun=false;
- $("applicant").value="balanced";
+ $("student").value="balanced";
  $("samples").value=100;
  $("features").value=4;
  updateLabels();
- $("status").hidden=true;
- $("predIcon").textContent="🧑‍💼";
- $("predLabel").textContent="Loan approved";
- $("predText").textContent="Alex's example is ready to investigate.";
- $("scoreMetric").textContent=Math.round(scoreModel(getProfile()))+"%";
+ const p=profile();
+ $("predIcon").textContent="🎓";
+ $("predLabel").textContent="Scholarship eligible";
+ $("predText").textContent="Aarav's example is ready to investigate.";
+ $("scoreMetric").textContent="—";
  $("sampleMetric").textContent="—";
  $("featureMetric").textContent="—";
+ $("status").hidden=true;
  $("plot").innerHTML="";
- $("plotCaption").textContent="Choose your settings and click Run Local Explanation.";
- $("explainIntro").textContent="Your local feature explanation will appear here after you run the experiment.";
- $("featureBars").innerHTML='<div class="empty">🌱 Waiting for your experiment. Click Run Local Explanation in the controls panel.</div>';
+ $("plotCaption").textContent="Run the experiment to generate nearby examples.";
+ $("explainIntro").textContent="Run the experiment to view the strongest simulated feature influences for this student.";
+ $("featureBars").innerHTML='<div class="empty">🌱 Your local explanation will appear here after you run the experiment.</div>';
  $("runBtn").disabled=false;
  $("runBtn").textContent="✨ Run Local Explanation";
 });
 $("themeBtn").addEventListener("click",()=>{
- document.body.classList.toggle("dark");
- $("themeBtn").textContent=document.body.classList.contains("dark")?"☀️ Theme":"🌙 Theme";
+ const dark=document.body.classList.toggle("dark");
+ $("themeBtn").textContent=dark?"☀️":"🌙";
+ $("themeBtn").setAttribute("aria-label",dark?"Switch to light theme":"Switch to dark theme");
+ $("themeBtn").title=dark?"Switch to light theme":"Switch to dark theme";
 });
 document.querySelectorAll(".navlinks a").forEach(a=>{
  a.addEventListener("click",()=>{
-  document.querySelectorAll(".navlinks a").forEach(link=>link.classList.remove("active"));
+  document.querySelectorAll(".navlinks a").forEach(x=>x.classList.remove("active"));
   a.classList.add("active");
  });
 });
