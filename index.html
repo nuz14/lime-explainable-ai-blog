@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIME Garden | Explainable AI</title>
+<style>
+:root {
+  --bg:#F4FAF5; --card:#FFFFFF; --text:#315C4B;
+  --muted:#71877A; --green:#559773; --light:#DCEFE2;
+  --peach:#FBEBDD; --border:#DFEBE1;
+  --shadow:0 8px 28px #456c5012;
+}
+body.dark {
+  --bg:#192A22; --card:#25392E; --text:#E7F5EA;
+  --muted:#B7CDBD; --green:#91D2A8; --light:#344D3D;
+  --peach:#4B3B30; --border:#405747;
+  --shadow:0 8px 28px #00000020;
+}
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{
+ margin:0;background:var(--bg);color:var(--text);
+ font-family:"Segoe UI",Arial,sans-serif;line-height:1.7;
+ transition:background .25s,color .25s
+}
+a{color:var(--green)}
+button,input{font:inherit}
+button{cursor:pointer}
+nav{
+ position:sticky;top:0;z-index:10;background:var(--card);
+ border-bottom:1px solid var(--border);padding:14px 7%;
+ display:flex;align-items:center;justify-content:space-between
+}
+.logo{font-size:22px;font-weight:800;color:var(--green);text-decoration:none}
+.logo span{color:var(--text)}
+.navlinks{display:flex;gap:21px;align-items:center}
+.navlinks a{text-decoration:none;color:var(--muted);font-size:14px}
+.navlinks a:hover{color:var(--green)}
+.icon-btn{background:var(--light);color:var(--text);border:1px solid var(--border);border-radius:12px;padding:8px 12px}
+.menu-toggle{display:none}
+section{padding:65px 8%;scroll-margin-top:70px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:35px;align-items:center;min-height:490px}
+.eyebrow{display:inline-block;background:var(--light);color:var(--green);padding:7px 14px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:1px}
+h1{font-size:clamp(38px,5vw,60px);line-height:1.12;margin:20px 0}
+h2{font-size:clamp(27px,3vw,36px);line-height:1.25;margin:0 0 12px}
+h3{margin:10px 0 6px}
+p{color:var(--muted)}
+.accent{color:var(--green)}
+.panel,.card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:24px;box-shadow:var(--shadow)}
+.hero-art{background:linear-gradient(140deg,var(--light),var(--peach))}
+.btn{display:inline-block;border:0;border-radius:13px;padding:12px 18px;margin:6px 6px 6px 0;background:var(--green);color:#fff;text-decoration:none;font-weight:700}
+.btn.secondary{background:var(--light);color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.section-head{max-width:690px;text-align:center;margin:0 auto 32px}
+.center{text-align:center}
+.emoji{font-size:30px}
+.small{font-size:13px}
+.callout{background:var(--light);padding:17px;border-radius:15px;margin-top:18px}
+.chart-row{margin:18px 0}
+.chart-label{display:flex;justify-content:space-between;font-size:14px}
+.track{height:12px;background:var(--light);border-radius:20px;overflow:hidden}
+.bar{height:100%;border-radius:20px;transition:width .3s}
+.positive{background:#70B68C}
+.negative{background:#E9AD91}
+.feature-buttons{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}
+.feature-btn{padding:9px 13px;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:12px}
+.feature-btn.active{background:var(--green);color:white}
+.stat{font-size:34px;font-weight:800;color:var(--green)}
+label{display:block;font-weight:650;margin:14px 0 4px}
+input[type=range]{width:100%;accent-color:var(--green)}
+footer{text-align:center;padding:30px;background:var(--card);border-top:1px solid var(--border);color:var(--muted)}
+@media(max-width:760px){
+ .hero{grid-template-columns:1fr;padding-top:35px}
+ .grid{grid-template-columns:1fr}
+ .navlinks{display:none;position:absolute;top:63px;left:0;right:0;background:var(--card);padding:20px;flex-direction:column;border-bottom:1px solid var(--border)}
+ .navlinks.open{display:flex}
+ .menu-toggle{display:inline-block}
+ nav{padding:13px 5%}
+ section{padding:45px 6%}
+}
+</style>
+</head>
+<body>
+<nav>
+ <a href="#home" class="logo">🌿 lime<span>.garden</span></a>
+ <div class="navlinks" id="navlinks">
+  <a href="#home">Home</a>
+  <a href="#learn">Learn LIME</a>
+  <a href="#visuals">Visuals</a>
+  <a href="#playground">Try it ✨</a>
+  <a href="#about">About</a>
+ </div>
+ <div>
+  <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+  <button class="icon-btn menu-toggle" id="menuBtn" aria-label="Open menu">☰</button>
+ </div>
+</nav>
+
+<main>
+<section class="hero" id="home">
+ <div>
+  <span class="eyebrow">✦ ADVANCED MACHINE LEARNING</span>
+  <h1>Every decision has a <span class="accent">reason. ♡</span></h1>
+  <p>Meet LIME, a technique that helps us understand why a machine learning model made a particular prediction. Let's make AI a little less mysterious!</p>
+  <a class="btn" href="#learn">Explore LIME ✨</a>
+  <a class="btn secondary" href="#playground">Try the playground →</a>
+  <p class="small">🌼 Learn • Explore • Understand</p>
+ </div>
+ <div class="panel hero-art">
+  <div class="center">
+   <div style="font-size:46px">🪴</div>
+   <h3>A prediction, explained</h3>
+   <p class="small">Illustrative feature contributions</p>
+  </div>
+  <div class="chart-row">
+   <div class="chart-label"><span>Study hours 📚</span><b>+0.35</b></div>
+   <div class="track"><div class="bar positive" style="width:78%"></div></div>
+  </div>
+  <div class="chart-row">
+   <div class="chart-label"><span>Attendance 🌼</span><b>+0.25</b></div>
+   <div class="track"><div class="bar positive" style="width:58%"></div></div>
+  </div>
+  <div class="chart-row">
+   <div class="chart-label"><span>Missed classes ☁️</span><b>−0.30</b></div>
+   <div class="track"><div class="bar negative" style="width:65%"></div></div>
+  </div>
+  <p class="small">Example values only — not calculated by a trained model.</p>
+ </div>
+</section>
+
+<section id="learn">
+ <div class="section-head">
+  <span class="eyebrow">THE BASICS 🌱</span>
+  <h2>What exactly is <span class="accent">LIME?</span></h2>
+  <p>LIME stands for Local Interpretable Model-agnostic Explanations. It explains an individual prediction by approximating a complex model locally with a simpler, interpretable model.</p>
+ </div>
+ <div class="grid">
+  <article class="card">
+   <div class="emoji">🔎</div><h3>Local explanations</h3>
+   <p>LIME focuses on one prediction at a time rather than explaining the whole model at once.</p>
+  </article>
+  <article class="card">
+   <div class="emoji">🧩</div><h3>Simple interpretation</h3>
+   <p>It uses a simpler local model to show which input features influenced the selected prediction.</p>
+  </article>
+  <article class="card">
+   <div class="emoji">💚</div><h3>Model-agnostic</h3>
+   <p>LIME can explain predictions from different types of models when a suitable prediction interface is available.</p>
+  </article>
+ </div>
+ <div class="callout">
+  <b>🌿 The key idea</b>
+  <p>LIME creates perturbed samples around an example, observes the original model's predictions, and fits a locally weighted interpretable model. The explanation approximates the model near that particular example; it may not describe the model everywhere.</p>
+ </div>
+</section>
+
+<section id="visuals">
+ <div class="section-head">
+  <span class="eyebrow">VISUAL LEARNING 📊</span>
+  <h2>Explore the features</h2>
+  <p>Click a feature to explore an example of how it may influence one prediction.</p>
+ </div>
+ <div class="panel">
+  <h3>🌼 Example: Student performance</h3>
+  <p class="small">These are illustrative explanations, not real model results.</p>
+  <div class="feature-buttons">
+   <button class="feature-btn active" data-feature="study">📚 Study hours</button>
+   <button class="feature-btn" data-feature="attendance">🌷 Attendance</button>
+   <button class="feature-btn" data-feature="missed">☁️ Missed classes</button>
+   <button class="feature-btn" data-feature="sleep">🌙 Sleep</button>
+  </div>
+  <div class="callout" id="featureDetail" aria-live="polite">
+   <h3>📚 Study hours</h3>
+   <p>In this example, study hours support a higher predicted performance score.</p>
+   <b>Illustrative contribution: +0.35</b>
+  </div>
+  <p class="small">Actual LIME explanations depend on the selected instance, trained model, features, and sampling settings.</p>
+ </div>
+</section>
+
+<section id="playground">
+ <div class="section-head">
+  <span class="eyebrow">YOUR LITTLE LAB 🧪</span>
+  <h2>Try the explanation playground</h2>
+  <p>Adjust sample contributions and see how they change a made-up example score. This is an educational simulation, not a real LIME model.</p>
+ </div>
+ <div class="grid" style="grid-template-columns:1.1fr .9fr">
+  <div class="panel">
+   <h3>Adjust feature contributions 🎛️</h3>
+   <label for="studyRange">Study hours</label>
+   <input type="range" id="studyRange" min="-30" max="30" value="20">
+   <div class="chart-label"><span>Study contribution</span><b id="studyVal">+0.20</b></div>
+   <label for="attendanceRange">Attendance</label>
+   <input type="range" id="attendanceRange" min="-30" max="30" value="15">
+   <div class="chart-label"><span>Attendance contribution</span><b id="attendanceVal">+0.15</b></div>
+   <label for="missedRange">Missed classes</label>
+   <input type="range" id="missedRange" min="-30" max="30" value="-10">
+   <div class="chart-label"><span>Missed classes contribution</span><b id="missedVal">−0.10</b></div>
+   <button class="btn secondary" id="resetBtn">↻ Reset values</button>
+  </div>
+  <div class="panel center">
+   <div style="font-size:38px">🔮</div>
+   <p>Illustrative baseline</p>
+   <div class="stat">0.50</div>
+   <p>Combined example score</p>
+   <div class="stat" id="result">0.75</div>
+   <div class="track"><div class="bar positive" id="resultBar" style="width:75%"></div></div>
+   <div class="callout" id="resultText" aria-live="polite">The selected contributions bring the example score to 0.75.</div>
+   <p class="small">Baseline plus the selected contributions, limited to the illustrative range from 0 to 1.</p>
+  </div>
+ </div>
+</section>
+
+<section id="about">
+ <div class="section-head">
+  <span class="eyebrow">QUICK RECAP 💌</span>
+  <h2>Why is LIME useful?</h2>
+  <p>Understanding a prediction can help people investigate model behaviour, communicate results, and identify questions that need further testing.</p>
+ </div>
+ <div class="grid">
+  <article class="card">
+   <div class="emoji">🎯</div><h3>One prediction</h3>
+   <p>Study the reasons behind an individual model output.</p>
+  </article>
+  <article class="card">
+   <div class="emoji">🌍</div><h3>Many model types</h3>
+   <p>Apply the approach to different classifiers or regressors using an appropriate prediction function.</p>
+  </article>
+  <article class="card">
+   <div class="emoji">📖</div><h3>Keep learning</h3>
+   <p>Experiment with a real trained model and compare explanations under different settings.</p>
+  </article>
+ </div>
+ <div class="panel" style="margin-top:22px">
+  <h3>📚 Further reading</h3>
+  <p>Explore the original LIME research and the project's Python implementation.</p>
+  <a class="btn" href="https://github.com/marcotcr/lime" target="_blank" rel="noopener noreferrer">LIME on GitHub ↗</a>
+  <a class="btn secondary" href="https://arxiv.org/abs/1602.04938" target="_blank" rel="noopener noreferrer">Read the research paper ↗</a>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div style="font-size:25px">🌿 🌼 💚</div>
+ <b>lime.garden — Growing understanding, one prediction at a time</b>
+ <p class="small">A student learning blog about Explainable Artificial Intelligence.</p>
+ <p class="small">Educational demonstrations only. Example values are not real model predictions.</p>
+ <a href="#home">Back to top ↑</a>
+</footer>
+
+<script>
+document.getElementById("themeBtn").addEventListener("click",function(){
+ document.body.classList.toggle("dark");
+ this.textContent=document.body.classList.contains("dark")?"☀️":"🌙";
+});
+document.getElementById("menuBtn").addEventListener("click",function(){
+ document.getElementById("navlinks").classList.toggle("open");
+});
+document.querySelectorAll(".navlinks a").forEach(link=>{
+ link.addEventListener("click",()=>{
+  document.getElementById("navlinks").classList.remove("open");
+ });
+});
+
+const details={
+ study:{
+  title:"📚 Study hours",
+  description:"In this made-up example, study hours support a higher predicted performance score.",
+  value:"+0.35"
+ },
+ attendance:{
+  title:"🌷 Attendance",
+  description:"Attendance contributes positively in this example. A real model could show a different relationship.",
+  value:"+0.25"
+ },
+ missed:{
+  title:"☁️ Missed classes",
+  description:"Missed classes contribute negatively in this example, lowering the predicted score.",
+  value:"−0.30"
+ },
+ sleep:{
+  title:"🌙 Sleep",
+  description:"Adequate sleep is assumed to support performance in this illustration. This is not a scientific finding from a trained model.",
+  value:"+0.10"
+ }
+};
+document.querySelectorAll(".feature-btn").forEach(button=>{
+ button.addEventListener("click",()=>{
+  document.querySelectorAll(".feature-btn").forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+  const item=details[button.dataset.feature];
+  document.getElementById("featureDetail").innerHTML=
+   "<h3>"+item.title+"</h3><p>"+item.description+"</p><b>Illustrative contribution: "+item.value+"</b>";
+ });
+});
+
+const sliders=[
+ {id:"studyRange",label:"studyVal"},
+ {id:"attendanceRange",label:"attendanceVal"},
+ {id:"missedRange",label:"missedVal"}
+];
+function updatePlayground(){
+ let total=.50;
+ sliders.forEach(item=>{
+  const value=Number(document.getElementById(item.id).value)/100;
+  total+=value;
+  document.getElementById(item.label).textContent=
+   (value>0?"+":value<0?"−":"")+Math.abs(value).toFixed(2);
+ });
+ total=Math.max(0,Math.min(1,total));
+ document.getElementById("result").textContent=total.toFixed(2);
+ document.getElementById("resultBar").style.width=(total*100)+"%";
+ document.getElementById("resultText").textContent=
+  "Baseline 0.50 plus the selected example contributions gives "+total.toFixed(2)+". The display is limited to the 0–1 range.";
+}
+sliders.forEach(item=>{
+ document.getElementById(item.id).addEventListener("input",updatePlayground);
+});
+document.getElementById("resetBtn").addEventListener("click",()=>{
+ document.getElementById("studyRange").value=20;
+ document.getElementById("attendanceRange").value=15;
+ document.getElementById("missedRange").value=-10;
+ updatePlayground();
+});
+updatePlayground();
+</script>
+</body>
+</html>
